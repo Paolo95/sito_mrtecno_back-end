@@ -1,0 +1,42 @@
+version: "2.2.3"
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mrtecno
+      MYSQL_USER: mrtecno
+      MYSQL_DATABASE: mrtecno
+      MYSQL_PASSWORD: mrtecno
+    ports:
+      - "5506:3306"
+    restart: always
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+    
+
+  backend:
+    build: .
+    container_name: servermrtecno
+    image: servermrtecno
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    links:
+      - mysql
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql 
+      PMA_PORT: 3306
+    depends_on: 
+      - mysql
