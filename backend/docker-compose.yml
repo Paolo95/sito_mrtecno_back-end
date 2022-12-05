@@ -10,9 +10,9 @@ services:
       MYSQL_PASSWORD: mrtecno
     ports:
       - "5506:3306"
-    restart: always
     volumes:
       - ./mysql-dump:/docker-entrypoint-initdb.d
+    restart: always
     
 
   backend:
@@ -28,15 +28,15 @@ services:
       - mysql
     restart: always
 
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    links:
-      - mysql
-    ports:
-      - 8080:80
-    environment:
-      PMA_HOST: mysql 
-      PMA_PORT: 3306
-    depends_on: 
-      - mysql
+#  phpmyadmin:
+#    image: phpmyadmin
+#    restart: always
+#    links:
+#      - mysql
+#    ports:
+#      - 8080:80
+#    environment:
+#      PMA_HOST: mysql 
+#      PMA_PORT: 3306
+#    depends_on: 
+#      - mysql

@@ -1,19 +1,44 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const products = require ('./config/mySql');
+const database = require ('./model/database');
+const userRoute = require('./routes/users');
+const allowedOrigins = require('./config/allowedOrigins');
+const cors = require('cors');
 
-dotenv.config()
+const corsOptions = {
+  origin: allowedOrigins,
+  optionsSuccessStatus: 200,
+  credentials: true
+}
+
+dotenv.config();
 
 const app = express();
 
-app.get("/", (req,res) => {
-    res.send("API is running");
-});
+app.use(express.json());
+app.use(cors(corsOptions));
+app.use('/api/user', userRoute);
 
-app.get("/api/products", (req,res) => {
-    res.send("API is running");
+app.get("/", (req,res) => {
+    res.send("MrTecno server is running!");
 });
 
 const PORT = process.env.PORT;
 
 app.listen(PORT, console.log(`Server running on port ${PORT}`));
+
+dbConnection();
+
+async function dbConnection(){
+       
+    try {
+
+        await database.sequelize;
+        console.log('Connessione stabilita correttamente');
+    
+        await database.sequelize.sync();
+        console.log("Sincronizzazione effettuta!"); 
+    } catch (error) {
+        console.error('Impossibile stabilire una connessione, errore: ', error);
+    }
+}
