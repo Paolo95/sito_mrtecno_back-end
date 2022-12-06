@@ -4,16 +4,33 @@ class User_controller{
 
     constructor(){};
 
-    async register(decoded){
+    async register(userFE){
         
-        const user = await Database.user.findOne({where: { username: decoded.username }});
+        const user = await Database.user.findOne({where: { username: userFE.username }});
+        
+        console.log(userFE.lastname)
         
         if(user){
             return [409, 'Username già presente!']
         }else{
-            return [200, 'Registrazione completata con successo!'];
+            const newCustomer = await Database.user.create({
+                lastname: userFE.lastname,
+                name: userFE.name,
+                email: userFE.email,
+                username: userFE.username,
+                password: userFE.password,
+                role: userFE.role
+            })
+
+            if (!newCustomer){
+                return [500, 'ERRORE SERVER: impossibile creare l\'utente'];
+            }else{
+                return [200, 'Registrazione completata con successo!'];
+            }
+            
         }
         
+       
     }
 
 }
