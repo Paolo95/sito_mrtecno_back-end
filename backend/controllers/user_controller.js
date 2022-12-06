@@ -11,11 +11,14 @@ class User_controller{
     async register(userFE){
         
         const user = await Database.user.findOne({where: { username: userFE.username }});
+        const email = await Database.user.findOne({where: { email: userFE.email }});
 
         const cryptedPass = bcrypt.hashSync(userFE.password, parseInt(process.env.SALT_ROUNDS));
 
         if(user){
             return [409, 'Username già presente!']
+        }else if (email){
+            return [409, 'email già presente!']
         }else{
             const newCustomer = await Database.user.create({
                 lastname: userFE.lastname,
