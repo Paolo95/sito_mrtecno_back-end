@@ -41,16 +41,16 @@ const User = Singleton.createSingleton.getInstance().define('user', {
       allowNull: false
   },
   name: {
-    type: Sequelize.STRING,
-    allowNull: false
+      type: Sequelize.STRING,
+      allowNull: false
   },
   email: {
-    type: Sequelize.STRING,
-    allowNull: false
+      type: Sequelize.STRING,
+      allowNull: false
   },
   username: {
-    type: Sequelize.STRING,
-    allowNull: false
+      type: Sequelize.STRING,
+      allowNull: false
   },
   password: {
       type: Sequelize.STRING,
@@ -58,7 +58,13 @@ const User = Singleton.createSingleton.getInstance().define('user', {
   },
   role: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      defaulValue: 'customer'
+  },
+  verified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaulValue: 0
   }
 }, { 
   timestamps: false,

@@ -1,4 +1,8 @@
 const Database = require('../model/database');
+const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 class User_controller{
 
@@ -7,9 +11,9 @@ class User_controller{
     async register(userFE){
         
         const user = await Database.user.findOne({where: { username: userFE.username }});
-        
-        console.log(userFE.lastname)
-        
+
+        const cryptedPass = bcrypt.hashSync(userFE.password, parseInt(process.env.SALT_ROUNDS));
+
         if(user){
             return [409, 'Username già presente!']
         }else{
@@ -18,8 +22,9 @@ class User_controller{
                 name: userFE.name,
                 email: userFE.email,
                 username: userFE.username,
-                password: userFE.password,
-                role: userFE.role
+                password: cryptedPass,
+                role: userFE.role,
+                verified: false
             })
 
             if (!newCustomer){
