@@ -107,9 +107,9 @@ class User_controller{
         
         if(!userFE.username || !userFE.password) return [400, 'Username e/o password richieste'];
 
-        const foundUser = await Database.user.findOne({ where: {username: userFE.username} });
-
-        if (!foundUser) return [401, 'Non autorizzato'];
+        const foundUser = await Database.user.findOne({ where: {username: userFE.username, verified: 1} });
+        
+        if (!foundUser) return [401, 'Non autorizzato e/o account non attivato'];
 
         const match = await bcrypt.compare(userFE.password, foundUser.password);
         
