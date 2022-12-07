@@ -1,6 +1,8 @@
 const Database = require('../model/database');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -18,7 +20,7 @@ class User_controller{
         if(user){
             return [409, 'Username già presente!']
         }else if (email){
-            return [409, 'email già presente!']
+            return [409, 'Email già presente!']
         }else{
             const newCustomer = await Database.user.create({
                 lastname: userFE.lastname,
@@ -33,7 +35,50 @@ class User_controller{
             if (!newCustomer){
                 return [500, 'ERRORE SERVER: impossibile creare l\'utente'];
             }else{
-                return [200, 'Registrazione completata con successo!'];
+                let emailToken = jwt.sign(
+                    {
+                        user: userFE.username,
+                    },
+                    process.env.EMAIL_SECRET,
+                    {
+                        expiresIn: '1d',
+                    });            
+                    
+                const url = `http://localhost:5000/api/user/confirmation/${emailToken}`
+
+                let transporter = nodemailer.createTransport({
+                    service: process.env.EMAIL_SERVICE,
+                    host: 'smtp.gmail.com',
+                    secure: false,
+                    auth: {
+                      user: process.env.USER_EMAIL,
+                      pass: process.env.USER_PASS
+                    },
+                  });
+
+                const mailOptions = {
+                    from: process.env.USER_EMAIL,
+                    to: userFE.email,
+                    subject: 'MrTecno - Conferma la tua e-mail!',
+                    html: `Per favore, conferma la tua email cliccando sul link: <a href="${url}">${url}</a>`
+                };
+
+                let errorPresent = false;
+
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        errorPresent = true;
+                    } else {
+                        errorPresent = false;
+                    }
+                  });
+                
+                  if(errorPresent){
+                    return [500, 'Errore nel server!'];
+                  }else{
+                    return [200, 'Abbiamo inviato una mail di conferma al tuo indirizzo di posta elettronica per la verifica!'];
+                  }
+                  
             }
             
         }
@@ -41,6 +86,24 @@ class User_controller{
        
     }
 
+    async userConfirmation(decoded){
+
+        console.log(decoded);
+
+        const user = await Database.user.findOne({where: { username: decoded.user }});
+
+        if(!user){
+            return [409, 'Username non presente!']
+        }
+        
+        const userVerified = await Database.user.update({ verified: 1 }, { where: { user_id: user.user_id }});
+        
+        if (!userVerified){
+            return [500, 'Errore nel server: impossibile verificare la mail'];
+        }
+
+        return[200, 'Email verificata!']
+    }
 }
 
 module.exports = User_controller;
