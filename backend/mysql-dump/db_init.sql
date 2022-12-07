@@ -11,4 +11,4 @@ CREATE TABLE user (
     verified BOOLEAN DEFAULT 0 NOT NULL,
     PRIMARY KEY(user_id));
 
-INSERT INTO user VALUE(1, "Compagnoni", "Paolo", "compagnonipaolo95@gmail.com", "Paolo95", "Paolo1995!", "admin", 1);
+INSERT INTO user VALUE(1, "Compagnoni", "Paolo", "compagnonipaolo95@gmail.com", "Paolo95", "$2b$10$FoBH/lFS/vob01aLOZVcJ.swWJh0yn0lwQ7FtmQhGTSgvtDwNCn72", "admin", 1);

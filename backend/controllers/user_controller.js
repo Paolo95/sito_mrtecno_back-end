@@ -88,8 +88,6 @@ class User_controller{
 
     async userConfirmation(decoded){
 
-        console.log(decoded);
-
         const user = await Database.user.findOne({where: { username: decoded.user }});
 
         if(!user){
@@ -103,6 +101,48 @@ class User_controller{
         }
 
         return[200, 'Email verificata!']
+    }
+
+    async userAuth(userFE){
+        
+        if(!userFE.username || !userFE.password) return [400, 'Username e/o password richieste'];
+
+        const foundUser = await Database.user.findOne({ where: {username: userFE.username} });
+
+        if (!foundUser) return [401, 'Non autorizzato'];
+
+        const match = await bcrypt.compare(userFE.password, foundUser.password);
+        
+        if (match){
+            
+            const role = foundUser.role;
+
+            const accessToken = jwt.sign(
+                {
+                    "UserInfo": {
+                        "username": foundUser.username,
+                        "role": role
+                    }
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '1h' }
+            );
+
+            const refreshToken = jwt.sign(
+                { "username": foundUser.username },
+                process.env.REFRESH_TOKEN_SECRET,
+                { expiresIn: '1d'}
+            );
+
+            foundUser.refreshToken = refreshToken;
+
+            const result = await foundUser.save();
+
+            return [refreshToken, role]
+            
+        }else{
+            return [401, 'Utente non ammesso']
+        }
     }
 }
 
