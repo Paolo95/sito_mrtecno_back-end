@@ -16,9 +16,9 @@ router.get('/confirmation/:token', tokenVerify, async (req, res) => {
     let token = req.params.token;
     const decoded = jwt.decode(token, process.env.EMAIL_SECRET);
 
-    const result = await user_controller.userConfirmation(decoded);
+    await user_controller.userConfirmation(decoded);
 
-    return res.redirect('http://localhost:3000/logsuccess');
+    return res.redirect('http://localhost:3000/regsuccess');
 
 });
 
@@ -30,9 +30,9 @@ router.post('/auth', async (req, res) => {
         res.status(result[0]).send(result[1]);
     }else{
 
-        res.cookie('jwt', result[0], {httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('jwt', result[0], { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
         const role = result[1]
-        const accessToken = result[0];
+        const accessToken = result[2];
         res.json({role, accessToken});
     }
 })

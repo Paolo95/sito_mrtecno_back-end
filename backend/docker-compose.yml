@@ -37,6 +37,8 @@ services:
       - 8080:80
     environment:
       PMA_HOST: mysql 
+      PMA_USER: mrtecno
+      PMA_PASSWORD: mrtecno
       PMA_PORT: 3306
     depends_on: 
       - mysql

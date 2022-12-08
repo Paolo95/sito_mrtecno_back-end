@@ -91,7 +91,7 @@ class User_controller{
         const user = await Database.user.findOne({where: { username: decoded.user }});
 
         if(!user){
-            return [409, 'Username non presente!']
+            return [409, 'Username non presente!'];
         }
         
         const userVerified = await Database.user.update({ verified: 1 }, { where: { user_id: user.user_id }});
@@ -109,7 +109,7 @@ class User_controller{
 
         const foundUser = await Database.user.findOne({ where: {username: userFE.username, verified: 1} });
         
-        if (!foundUser) return [401, 'Non autorizzato e/o account non attivato'];
+        if (!foundUser) return [401, 'Username e/o password errati o utente non attivato!'];
 
         const match = await bcrypt.compare(userFE.password, foundUser.password);
         
@@ -136,12 +136,12 @@ class User_controller{
 
             foundUser.refreshToken = refreshToken;
 
-            const result = await foundUser.save();
+            // const result = await foundUser.save();
 
-            return [refreshToken, role]
+            return [refreshToken, role, accessToken];
             
         }else{
-            return [401, 'Utente non ammesso']
+            return [401, 'Password errata!'];
         }
     }
 }
