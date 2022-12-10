@@ -29,7 +29,8 @@ class User_controller{
                 username: userFE.username,
                 password: cryptedPass,
                 role: userFE.role,
-                verified: false
+                verified: false,
+                refresh_token: '',
             })
 
             if (!newCustomer){
@@ -104,7 +105,7 @@ class User_controller{
     }
 
     async userAuth(userFE){
-        
+
         if(!userFE.username || !userFE.password) return [400, 'Username e/o password richieste'];
 
         const foundUser = await Database.user.findOne({ where: {username: userFE.username, verified: 1} });
@@ -125,18 +126,18 @@ class User_controller{
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '1h' }
+                { expiresIn: '10s' }
             );
 
             const refreshToken = jwt.sign(
                 { "username": foundUser.username },
                 process.env.REFRESH_TOKEN_SECRET,
-                { expiresIn: '1d'}
+                { expiresIn: '15s'}
             );
 
-            foundUser.refreshToken = refreshToken;
+            const userRefreshed = await Database.user.update({ refresh_token: refreshToken }, { where: { user_id: foundUser.user_id }});
 
-            // const result = await foundUser.save();
+            if (!userRefreshed) return [500, 'Impossibile salvare il refreshToken!'];
 
             return [refreshToken, role, accessToken];
             
@@ -144,6 +145,49 @@ class User_controller{
             return [401, 'Password errata!'];
         }
     }
+
+    async refresh(cookiesFE){
+
+        const cookies = cookiesFE;
+
+        let accessToken = '';
+
+        if(!cookies?.jwt) return [401, 'Cookies non presenti!'];
+
+        const refreshToken = cookies.jwt;
+
+        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken, verified: 1} });
+        
+        if (!foundUser) return [403, 'Utente non autorizzato!'];
+
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function (err, decoded){
+            if ( err || foundUser.username !== decoded.username ) {
+                return [403, 'Utente non autorizzato!'];
+            }
+
+            accessToken = jwt.sign(
+                {
+                    "username": decoded.username
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                {
+                    expiresIn: '30s'
+                }
+            );
+    
+        });                
+        
+        return [accessToken]; 
+            
+    }
+
+    async getUser(){
+
+        const users = await Database.user.findAll();
+        return [users[0].lastname]
+    }
 }
+
+    
 
 module.exports = User_controller;

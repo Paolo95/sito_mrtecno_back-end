@@ -65,7 +65,11 @@ const User = Singleton.createSingleton.getInstance().define('user', {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaulValue: 0
-  }
+  },
+  refresh_token: {
+    type: Sequelize.STRING,
+    allowNull: false
+},
 }, { 
   timestamps: false,
   freezeTableName: true

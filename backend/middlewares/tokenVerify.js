@@ -3,19 +3,20 @@ const jwt = require('jsonwebtoken');
 function tokenVerify(req, res, next){
 
 
-    let token = req.params.token;
-    console.log(token);
-    if(!token){         
-        return res.status(500).send('Accesso negato!');
+    let token = req.header('Authorization');
+    token = token.split(" ");
+
+    if(!token){     
+        return res.status(403).send('Accesso negato!');
     }
     
     try{
-        const verified = jwt.verify(token, process.env.EMAIL_SECRET);
+        const verified = jwt.verify(token[1], process.env.ACCESS_TOKEN_SECRET);
         req.user = verified;
         next();
 
     } catch(err){
-        return res.status(500).send('ERRORE: Token non valido: ');
+        return res.status(403).send('ERRORE: Token non valido: ');
     }
 
 }

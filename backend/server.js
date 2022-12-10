@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 const database = require ('./model/database');
 const userRoute = require('./routes/users');
 const allowedOrigins = require('./config/allowedOrigins');
@@ -16,7 +17,9 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors(corsOptions));
+
 app.use('/api/user', userRoute);
 
 app.get("/", (req,res) => {
