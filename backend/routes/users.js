@@ -32,9 +32,8 @@ router.post('/auth', async (req, res) => {
     }else{
 
         res.cookie('jwt', result[0], { httpOnly: true, sameSite: 'None', secure:true, maxAge: 24 * 60 * 60 * 1000 });
-        const role = result[1];
-        const accessToken = result[2];
-        res.json({role, accessToken});
+        const accessToken = result[1];
+        res.json({accessToken});
     }
 })
 
@@ -46,7 +45,8 @@ router.get('/refresh', async (req, res) => {
         res.json({accessToken: '', role: '', username: ''});
         //res.status(result[0]).send(result[1]);
     }else{
-        res.json({accessToken: result[0], role: result[1], username: result[2]});
+        
+        res.json({accessToken: result[0]});
     }
 })
 

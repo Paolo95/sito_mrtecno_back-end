@@ -139,7 +139,7 @@ class User_controller{
 
             if (!userRefreshed) return [500, 'Impossibile salvare il refreshToken!'];
 
-            return [refreshToken, role, accessToken];
+            return [refreshToken, accessToken];
             
         }else{
             return [401, 'Password errata!'];
@@ -170,7 +170,10 @@ class User_controller{
 
             accessToken = jwt.sign(
                 {
-                    "username": decoded.username
+                    "UserInfo": {
+                        "username": foundUser.username,
+                        "role": foundUser.role,
+                    }                        
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 {
@@ -183,7 +186,7 @@ class User_controller{
         if (notValidRefreshToken === true) {
             return [403, 'Utente non autorizzato!'];
         }else{
-            return [accessToken, foundUser.role, foundUser.username]; 
+            return [accessToken]; 
         }
         
             
