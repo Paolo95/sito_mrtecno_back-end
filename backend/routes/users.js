@@ -43,9 +43,10 @@ router.get('/refresh', async (req, res) => {
     const result = await user_controller.refresh(req.cookies);
     
     if(typeof(result[0]) === 'number'){
-        res.status(result[0]).send(result[1]);
+        res.json({accessToken: '', role: '', username: ''});
+        //res.status(result[0]).send(result[1]);
     }else{
-        res.json({accessToken: result[0]});
+        res.json({accessToken: result[0], role: result[1], username: result[2]});
     }
 })
 
@@ -55,4 +56,11 @@ router.get('/getUser', tokenVerify, async (req, res) => {
     res.json(result[0]);
 })
 
+router.get('/logout', async (req, res) => {
+
+    const result = await user_controller.logOut(req.cookies);
+
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+    res.status(result[0]).send(result[1]);
+});
 module.exports = router;

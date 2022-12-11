@@ -126,13 +126,13 @@ class User_controller{
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10s' }
+                { expiresIn: '1h' }
             );
 
             const refreshToken = jwt.sign(
                 { "username": foundUser.username },
                 process.env.REFRESH_TOKEN_SECRET,
-                { expiresIn: '15s'}
+                { expiresIn: '4h'}
             );
 
             const userRefreshed = await Database.user.update({ refresh_token: refreshToken }, { where: { user_id: foundUser.user_id }});
@@ -160,10 +160,13 @@ class User_controller{
         
         if (!foundUser) return [403, 'Utente non autorizzato!'];
 
+        let notValidRefreshToken = false;
+
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function (err, decoded){
+            
             if ( err || foundUser.username !== decoded.username ) {
-                return [403, 'Utente non autorizzato!'];
-            }
+                notValidRefreshToken = true;
+            }            
 
             accessToken = jwt.sign(
                 {
@@ -171,13 +174,18 @@ class User_controller{
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 {
-                    expiresIn: '30s'
+                    expiresIn: '1h'
                 }
             );
     
         });                
         
-        return [accessToken]; 
+        if (notValidRefreshToken === true) {
+            return [403, 'Utente non autorizzato!'];
+        }else{
+            return [accessToken, foundUser.role, foundUser.username]; 
+        }
+        
             
     }
 
@@ -185,6 +193,25 @@ class User_controller{
 
         const users = await Database.user.findAll();
         return [users[0].lastname]
+    }
+
+    async logOut(cookiesFE){
+
+        const cookies = cookiesFE;
+
+        if (!cookies?.jwt) return rreturn [204, 'Nessun refresh token trovato!'];
+        const refreshToken = cookies.jwt;
+
+        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken, verified: 1} });
+        
+        if (!foundUser) {
+            return [204, 'Nessun refresh token trovato!'];
+        }
+
+        const refreshTokenReset = await Database.user.update({ refresh_token: '' },{ where: {refresh_token: refreshToken, verified: 1} });
+        if (!refreshTokenReset) return [500, 'Errore nel server!']
+
+        return [204, 'Refresh token eliminato!'];
     }
 }
 
