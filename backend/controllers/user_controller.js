@@ -22,95 +22,87 @@ class User_controller{
         }else if (email){
             return [409, 'Email già presente!']
         }else{
-            const newCustomer = await Database.user.create({
-                lastname: userFE.lastname,
-                name: userFE.name,
-                email: userFE.email,
-                username: userFE.username,
-                password: cryptedPass,
-                role: userFE.role,
-                verified: false,
-                refresh_token: '',
-            })
-
-            if (!newCustomer){
-                return [500, 'ERRORE SERVER: impossibile creare l\'utente'];
-            }else{
-                let emailToken = jwt.sign(
-                    {
-                        user: userFE.username,
-                    },
-                    process.env.EMAIL_SECRET,
-                    {
-                        expiresIn: '1d',
-                    });            
-                    
-                const url = `http://localhost:5000/api/user/confirmation/${emailToken}`
-
-                let transporter = nodemailer.createTransport({
-                    service: process.env.EMAIL_SERVICE,
-                    host: 'smtp.gmail.com',
-                    secure: false,
-                    auth: {
-                      user: process.env.USER_EMAIL,
-                      pass: process.env.USER_PASS
-                    },
-                  });
-
-                const mailOptions = {
-                    from: process.env.USER_EMAIL,
-                    to: userFE.email,
-                    subject: 'MrTecno - Conferma la tua e-mail!',
-                    html: `Per favore, conferma la tua email cliccando sul link: <a href="${url}">${url}</a>`
-                };
-
-                let errorPresent = false;
-
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        errorPresent = true;
-                    } else {
-                        errorPresent = false;
-                    }
-                  });
+            let emailToken = jwt.sign(
+                {
+                    lastname: userFE.lastname,
+                    name: userFE.name,
+                    email: userFE.email,
+                    username: userFE.username,
+                    password: cryptedPass,
+                    role: userFE.role,
+                    refresh_token: '',
+                },
+                process.env.EMAIL_SECRET,
+                {
+                    expiresIn: '30m',
+                });            
                 
-                  if(errorPresent){
-                    return [500, 'Errore nel server!'];
-                  }else{
-                    return [200, 'Abbiamo inviato una mail di conferma al tuo indirizzo di posta elettronica per la verifica!'];
-                  }
-                  
-            }
+            const url = `http://localhost:5000/api/user/confirmation/${emailToken}`
+
+            let transporter = nodemailer.createTransport({
+                service: process.env.EMAIL_SERVICE,
+                host: 'smtp.gmail.com',
+                secure: false,
+                auth: {
+                    user: process.env.USER_EMAIL,
+                    pass: process.env.USER_PASS
+                },
+                });
+
+            const mailOptions = {
+                from: process.env.USER_EMAIL,
+                to: userFE.email,
+                subject: 'MrTecno - Conferma la tua e-mail!',
+                html: `Per favore, conferma la tua email cliccando sul link: <a href="${url}">${url}</a>`
+            };
+
+            let errorPresent = false;
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    errorPresent = true;
+                } else {
+                    errorPresent = false;
+                }
+                });
             
-        }
-        
+                if(errorPresent){
+                    return [500, 'Errore nel server!'];
+                }else{
+                    return [200, 'Abbiamo inviato una mail di conferma al tuo indirizzo di posta elettronica per la verifica!'];
+                }
+                  
+            }    
        
     }
 
     async userConfirmation(decoded){
 
-        const user = await Database.user.findOne({where: { username: decoded.user }});
-
-        if(!user){
-            return [409, 'Username non presente!'];
-        }
+        const newCustomer = await Database.user.create({
+                lastname: decoded.lastname,
+                name: decoded.name,
+                email: decoded.email,
+                username: decoded.username,
+                password: decoded.password,
+                role: decoded.role,
+                refresh_token: '',
+            });
+            
+            if (!newCustomer){
+                return [500, 'Errore nel server: impossibile inserire il nuovo utente!'];
+            }else{
+                return [200, 'Account verificato!']
+            }
         
-        const userVerified = await Database.user.update({ verified: 1 }, { where: { user_id: user.user_id }});
-        
-        if (!userVerified){
-            return [500, 'Errore nel server: impossibile verificare la mail'];
-        }
-
-        return[200, 'Email verificata!']
     }
 
     async userAuth(userFE){
 
         if(!userFE.username || !userFE.password) return [400, 'Username e/o password richieste'];
 
-        const foundUser = await Database.user.findOne({ where: {username: userFE.username, verified: 1} });
+        const foundUser = await Database.user.findOne({ where: {username: userFE.username} });
         
-        if (!foundUser) return [401, 'Username e/o password errati o utente non attivato!'];
+        if (foundUser === null) return [401, 'Username e/o password errati o utente non attivato!'];
 
         const match = await bcrypt.compare(userFE.password, foundUser.password);
         
@@ -137,7 +129,7 @@ class User_controller{
 
             const userRefreshed = await Database.user.update({ refresh_token: refreshToken }, { where: { user_id: foundUser.user_id }});
 
-            if (!userRefreshed) return [500, 'Impossibile salvare il refreshToken!'];
+            if (userRefreshed === null) return [500, 'Impossibile salvare il refreshToken!'];
 
             return [refreshToken, accessToken];
             
@@ -156,9 +148,9 @@ class User_controller{
 
         const refreshToken = cookies.jwt;
 
-        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken, verified: 1} });
+        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken} });
         
-        if (!foundUser) return [403, 'Utente non autorizzato!'];
+        if (foundUser === null) return [403, 'Utente non autorizzato!'];
 
         let notValidRefreshToken = false;
 
@@ -205,16 +197,91 @@ class User_controller{
         if (!cookies?.jwt) return rreturn [204, 'Nessun refresh token trovato!'];
         const refreshToken = cookies.jwt;
 
-        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken, verified: 1} });
+        const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken} });
         
-        if (!foundUser) {
+        if (foundUser === null) {
             return [204, 'Nessun refresh token trovato!'];
         }
 
-        const refreshTokenReset = await Database.user.update({ refresh_token: '' },{ where: {refresh_token: refreshToken, verified: 1} });
-        if (!refreshTokenReset) return [500, 'Errore nel server!']
+        const refreshTokenReset = await Database.user.update({ refresh_token: '' },{ where: {refresh_token: refreshToken} });
+        if ( refreshTokenReset === null ) return [500, 'Errore nel server!']
 
         return [204, 'Refresh token eliminato!'];
+    }
+
+    async userRecovery(emailFE){
+
+        const email = await Database.user.findOne({where: { email: emailFE.recEmail }});
+        if( email === null ){ return [403,'Email non presente!'] }
+
+        const randomPassword = Math.random().toString(36).slice(-10);
+        const cryptedPass = bcrypt.hashSync(randomPassword, parseInt(process.env.SALT_ROUNDS));
+
+        let emailToken = jwt.sign(
+            {
+                recEmail: emailFE.recEmail,
+                password: cryptedPass,
+            },
+            process.env.USER_RECOVERY_SECRET,
+            {
+                expiresIn: '30m',
+            });            
+            
+        const url = `http://localhost:5000/api/user/recoveryConfirmation/${emailToken}`;
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: 'smtp.gmail.com',
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: emailFE.recEmail,
+            subject: 'MrTecno - Conferma la modifica della password!',
+            html: `Per favore, conferma la modifica alla password cliccando sul link: <a href="${url}">${url}</a>
+                        la password provvisoria è: <b>${randomPassword}</b>`
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, 'Abbiamo inviato una mail con all\'interno la password provvissoria per confermare la modifica all\'account!'];
+        }
+
+
+    }
+
+    async recoveryConfirmation(decoded){
+        
+        const user = await Database.user.findOne({where: { email: decoded.recEmail }});
+ 
+        if(user === null){
+            return [409, 'Username non presente!'];
+        }
+        
+        const passUpdated = await Database.user.update({ password: decoded.password }, { where: { email: decoded.recEmail }});
+        
+        if (passUpdated === null){
+            return [500, 'Errore nel server: impossibile aggiornare la password'];
+        }
+
+        return [200, 'Password modificata!'];
+
     }
 }
 

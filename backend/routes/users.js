@@ -4,6 +4,7 @@ const emailTokenVerify = require('../middlewares/emailTokenVerify');
 const tokenVerify = require('../middlewares/tokenVerify');
 
 const User_controller = require('../controllers/user_controller');
+const recoveryTokenVerify = require('../middlewares/recoveryTokenVerify');
 const user_controller = new User_controller();
 
 router.post('/register', async (req, res) => {
@@ -17,9 +18,11 @@ router.get('/confirmation/:token', emailTokenVerify, async (req, res) => {
     let token = req.params.token;
     const decoded = jwt.decode(token, process.env.EMAIL_SECRET);
 
-    await user_controller.userConfirmation(decoded);
+    result = await user_controller.userConfirmation(decoded);
 
-    return res.redirect('http://localhost:3000/regsuccess');
+    res.redirect(`http://localhost:3000/regsuccess/${result[0]}`);
+    
+    
 
 });
 
@@ -63,4 +66,22 @@ router.get('/logout', async (req, res) => {
     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
     res.status(result[0]).send(result[1]);
 });
+
+router.post('/userRecovery', async (req, res) => {
+
+    const result = await user_controller.userRecovery(req.body);
+    res.status(result[0]).send(result[1]);
+});
+
+router.get('/recoveryConfirmation/:token', recoveryTokenVerify ,async (req, res) => {
+    
+    let token = req.params.token;
+    const decoded = jwt.decode(token, process.env.USER_RECOVERY_SECRET);
+
+    const result = await user_controller.recoveryConfirmation(decoded);
+    
+    res.redirect(`http://localhost:3000/pwdUpdSuccess/${result[0]}`);
+    
+})
+
 module.exports = router;
