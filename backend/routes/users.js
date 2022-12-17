@@ -46,7 +46,6 @@ router.get('/refresh', async (req, res) => {
     
     if(typeof(result[0]) === 'number'){
         res.json({accessToken: '', role: '', username: ''});
-        //res.status(result[0]).send(result[1]);
     }else{
         
         res.json({accessToken: result[0]});
