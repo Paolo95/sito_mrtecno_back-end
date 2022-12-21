@@ -10,8 +10,6 @@ services:
       MYSQL_PASSWORD: mrtecno
     ports:
       - "5506:3306"
-    volumes:
-      - ./mysql-dump:/docker-entrypoint-initdb.d
     restart: always
     
 

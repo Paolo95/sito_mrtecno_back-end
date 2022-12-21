@@ -127,7 +127,7 @@ class User_controller{
                 { expiresIn: '4h'}
             );
 
-            const userRefreshed = await Database.user.update({ refresh_token: refreshToken }, { where: { user_id: foundUser.user_id }});
+            const userRefreshed = await Database.user.update({ refresh_token: refreshToken }, { where: { id: foundUser.id }});
 
             if (userRefreshed === null) return [500, 'Impossibile salvare il refreshToken!'];
 

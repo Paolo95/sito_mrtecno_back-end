@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const database = require ('./model/database');
 const userRoute = require('./routes/users');
+const productRoute = require('./routes/products');
 const allowedOrigins = require('./config/allowedOrigins');
 const cors = require('cors');
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 app.use('/api/user', userRoute);
+app.use('/api/product', productRoute);
 
 app.get("/", (req,res) => {
     res.send("MrTecno server is running!");
@@ -44,4 +46,4 @@ async function dbConnection(){
     } catch (error) {
         console.error('Impossibile stabilire una connessione, errore: ', error);
     }
-}
+};
