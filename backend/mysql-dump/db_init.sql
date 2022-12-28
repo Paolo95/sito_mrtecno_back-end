@@ -14,10 +14,10 @@ VALUES
         (NULL, "./images/arrivals/arrivals2.png", "HP Office Desktop PC", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "PC", "HP", 820.00, "Descrizione PC HP","","","","",3, 25,100),
         (NULL, "./images/arrivals/arrivals2.png", "Tablet Android", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "Tablet", "Samsung", 180.00, "Descrizione Tablet","","","","",5, 15,80);
 
-INSERT INTO `order` (`id`, `order_date`, `order_status`, `shipping_code`, `notes`, `userId`)
+INSERT INTO `order` (`id`, `order_date`, `order_status`, `shipping_address`, `shipping_code`, `notes`, `userId`)
 VALUES
-        (NULL, "2022-12-12", "Ordine concluso", "12335131", "Note ordine...", 1),
-        (NULL, "2022-12-10", "Ordine in lavorazione", "w5634565", "Note ordine...", 2);
+        (NULL, "2022-12-12", "Ordine concluso", "Viale Piane 13 - 64013 - Corropoli", "12335131", "Note ordine...", 1),
+        (NULL, "2022-12-10", "Ordine in lavorazione", "Viale Piane 16 - 64013 - Corropoli", "w5634565", "Note ordine...", 2);
 
 INSERT INTO `order_product` (`id`, `qty`, `productId`, `orderId`)
 VALUES

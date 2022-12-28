@@ -4,7 +4,9 @@ const cookieParser = require('cookie-parser');
 const database = require ('./model/database');
 const userRoute = require('./routes/users');
 const productRoute = require('./routes/products');
+const orderRoute = require('./routes/orders');
 const allowedOrigins = require('./config/allowedOrigins');
+
 const cors = require('cors');
 
 const corsOptions = {
@@ -23,6 +25,7 @@ app.use(cors(corsOptions));
 
 app.use('/api/user', userRoute);
 app.use('/api/product', productRoute);
+app.use('/api/order', orderRoute);
 
 app.get("/", (req,res) => {
     res.send("MrTecno server is running!");

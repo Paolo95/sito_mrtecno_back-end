@@ -44,7 +44,6 @@ class Product_controller{
 
     async getFilteredItems(filters){
 
-        console.log(filters.brandCheckedList)
         if (filters.brandCheckedList.length === 0 || filters.brandCheckedList.filter(n => n).length === 0){
             if (filters.orderChoice === 0){
                 const shopItems = await Database.product.findAll({
@@ -242,6 +241,30 @@ class Product_controller{
         }
         
        
+    }
+
+    async getAvailability(prodIdBody){
+        
+        let isAvailable = false;
+
+        for (const item of prodIdBody.cart) {
+
+            const productQty = await Database.product.findOne({
+                attributes: ['qtyInStock'],
+                where: {
+                    id: item.id
+                }
+            });
+
+            if (productQty.qtyInStock >= item.qty) {
+                isAvailable = true;
+            }else {
+                isAvailable = false;
+            }
+    
+        };  
+   
+        return [isAvailable];
     }
 
 }
