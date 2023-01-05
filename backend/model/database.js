@@ -13,6 +13,9 @@ class Singleton{
           host: process.env.MYSQL_HOST,
           dialect: 'mysql',
           port: process.env.MYSQL_PORT,
+          dialectOptions: {
+            decimalNumbers: true
+          }
         });
           return sequelize;
       }

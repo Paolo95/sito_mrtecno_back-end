@@ -17,5 +17,17 @@ router.post('/newOrder', tokenVerify, async (req, res) => {
     
 });
 
+router.post('/userOrders', tokenVerify, async (req, res) => {
+
+    const result = await order_controller.getUserOrders(req);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+    
+});
 
 module.exports = router;

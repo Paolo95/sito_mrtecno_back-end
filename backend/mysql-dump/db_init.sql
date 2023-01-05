@@ -21,5 +21,5 @@ VALUES
 
 INSERT INTO `order_product` (`id`, `qty`, `productId`, `orderId`)
 VALUES
-        (NULL, 1, 1, 1),
-        (NULL, 2, 2, 1);
+        (NULL, 1, 1, 2),
+        (NULL, 2, 2, 2);

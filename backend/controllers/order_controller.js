@@ -1,12 +1,9 @@
 const Database = require('../model/database');
-const { Op } = require('sequelize');
-const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
-const { Sequelize } = require('sequelize');
-const MimeNode = require('nodemailer/lib/mime-node');
-const { use } = require('../routes/users');
+const { or, Sequelize } = require('sequelize');
+const { sequelize } = require('../model/database');
+const groupBy = require('group-by-with-sum');
 
 dotenv.config();
 
@@ -65,6 +62,51 @@ class Order_controller{
         });        
 
         return [200, "Ordine salvato correttamente!"];
+    }
+
+    async getUserOrders(req){
+
+        const username = req.user.UserInfo.username;
+
+        const userCode = await Database.user.findOne({
+            attributes: ['id'],
+            where: { username: username 
+            }
+        });
+
+        if (userCode === undefined) return [404, "Utente non trovato"] 
+
+        const order = await Database.order_product.findAll({
+            raw: true,
+            attributes: [[Database.sequelize.literal('SUM((qty * product.price) + 20)'), 'order_total']],
+            include: [
+                {
+                    model: Database.order,
+                    where: {
+                        userId: userCode.id
+                    },
+                    required: true,
+                },
+                {
+                    model: Database.product,
+                    required: true,
+                },
+            ],
+            group: ['order.id', 'product.id'],
+        });
+
+        if (!order) return [500, "Errore, impossibile recuperare gli ordini!"]; 
+
+        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
+
+        order_total_groupby.forEach((item_gb) => {
+            order.forEach((item_o) => {
+                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
+            })
+        })
+
+        return[order.filter((v,i,a)=>a.findIndex(v2=>(v2['order.id']===v['order.id']))===i)];
+
     }
 
 }
