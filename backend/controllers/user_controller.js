@@ -283,6 +283,96 @@ class User_controller{
         return [200, 'Password modificata!'];
 
     }
+
+    async passwordChange(reqFE){
+
+        const username = reqFE.user.UserInfo.username;
+        
+        const user = await Database.user.findOne({
+            attributes: ['id'],
+            where: { username: username}
+        });
+
+        if (user === null) return [404, "Utente non trovato!"];
+
+        const dbPwd = await Database.user.findOne({
+            attributes: ['password'],
+            where: { id: user.id}
+        });
+
+        const match = await bcrypt.compare(reqFE.body.oldPwd, dbPwd.password);
+
+        if (!match){
+            return [403, "La vecchia password è errata!"]
+        }
+
+        const cryptedPass = bcrypt.hashSync(reqFE.body.newPwd, parseInt(process.env.SALT_ROUNDS));
+
+        const passUpdated = await Database.user.update({ password: cryptedPass }, { where: { id: user.id }});
+              
+        if (passUpdated === null){
+            return [500, 'Errore nel server: impossibile aggiornare la password'];
+        }
+
+        return [200, "Password modificata con successo!"];
+
+    }
+
+    async deleteUser(reqFE){
+
+        const username = reqFE.user.UserInfo.username;
+        
+        const user = await Database.user.findOne({
+            attributes: ['id'],
+            where: { username: username}
+        });
+
+        if (user === null) return [404, "Utente non trovato!"];
+
+        const dbPwd = await Database.user.findOne({
+            attributes: ['password'],
+            where: { id: user.id}
+        });
+
+        const match = await bcrypt.compare(reqFE.body.password, dbPwd.password);
+
+        if (!match){
+            return [403, "La password è errata!"]
+        }
+
+        const order = await Database.order_product.findAll({
+            raw: true,
+            attributes: [],
+            include: [
+                {
+                    attributes: ['id', 'order_status'],
+                    model: Database.order,
+                    where: {
+                        userId: user.id
+                    },
+                    required: true,
+                }
+            ]
+        });
+
+        const orderFiltered = order.filter((v,i,a)=>a.findIndex(v2=>(v2['order.id']===v['order.id']))===i);
+
+        let orderPending = false;
+
+        orderFiltered.forEach((item) =>{
+            if (item['order.order_status'] === 'Ordine in lavorazione' || item['order.order_status'] === 'Ordine in spedizione'){
+                orderPending = true;
+            }
+        })
+
+        if (orderPending) { return [403, "Impossibile eliminare l'account se hai un ordine in lavorazione e/o spedizione!"] };
+        
+        const deleteUser = await Database.user.destroy({ where: { id: user.id } });
+
+        if (this.deleteUser === undefined) return [500, "Errore nel server!"]
+
+        return [200,"Account eliminato con successo!"]
+    }
 }
 
     

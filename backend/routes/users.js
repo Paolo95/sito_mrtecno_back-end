@@ -72,7 +72,7 @@ router.post('/userRecovery', async (req, res) => {
     res.status(result[0]).send(result[1]);
 });
 
-router.get('/recoveryConfirmation/:token', recoveryTokenVerify ,async (req, res) => {
+router.get('/recoveryConfirmation/:token', recoveryTokenVerify, async (req, res) => {
     
     let token = req.params.token;
     const decoded = jwt.decode(token, process.env.USER_RECOVERY_SECRET);
@@ -81,6 +81,18 @@ router.get('/recoveryConfirmation/:token', recoveryTokenVerify ,async (req, res)
     
     res.redirect(`http://localhost:3000/pwdUpdSuccess/${result[0]}`);
     
-})
+});
+
+router.post('/changePassword', tokenVerify, async (req, res) => {
+
+    const result = await user_controller.passwordChange(req);
+    res.status(result[0]).send(result[1]);
+});
+
+router.post('/deleteAccount', tokenVerify, async (req, res) => {
+
+    const result = await user_controller.deleteUser(req);
+    res.status(result[0]).send(result[1]);
+});
 
 module.exports = router;
