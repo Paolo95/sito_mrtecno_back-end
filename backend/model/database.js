@@ -110,7 +110,7 @@ const Product = Singleton.createSingleton.getInstance().define('product', {
         allowNull: false
     },
     price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT(7,2),
         allowNull: false
     },
     prod_description: {

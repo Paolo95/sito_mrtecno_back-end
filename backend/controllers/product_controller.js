@@ -52,6 +52,9 @@ class Product_controller{
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
                         }                      
                     },
                     order: [
@@ -69,6 +72,9 @@ class Product_controller{
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
                         }                           
                     },
                     order: [
@@ -86,7 +92,10 @@ class Product_controller{
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
-                        }                           
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }                            
                     },
                     order: [
                         ['price', 'DESC']
@@ -103,7 +112,10 @@ class Product_controller{
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
-                        }                           
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }                              
                     },
                     order: [
                         ['product_name', 'ASC']
@@ -120,7 +132,10 @@ class Product_controller{
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
-                        }                            
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }                                
                     },
                     order: [
                         ['product_name', 'DESC']
@@ -142,7 +157,10 @@ class Product_controller{
                         },
                         brandName: {
                             [Op.in]: filters.brandCheckedList,
-                        }                        
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }                            
                     },
                     order: [
                         ['stars', 'DESC']
@@ -162,7 +180,10 @@ class Product_controller{
                         },
                         brandName: {
                             [Op.in]: filters.brandCheckedList,
-                        }     
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }         
                             
                     },
                     order: [
@@ -183,7 +204,10 @@ class Product_controller{
                         },
                         brandName: {
                             [Op.in]: filters.brandCheckedList,
-                        }     
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }         
                             
                     },
                     order: [
@@ -204,7 +228,10 @@ class Product_controller{
                         },
                         brandName: {
                             [Op.in]: filters.brandCheckedList,
-                        }     
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }         
                             
                     },
                     order: [
@@ -225,7 +252,10 @@ class Product_controller{
                         },
                         brandName: {
                             [Op.in]: filters.brandCheckedList,
-                        }     
+                        },
+                        qtyInStock: {
+                            [Op.gt]: 0,
+                        }         
                             
                     },
                     order: [

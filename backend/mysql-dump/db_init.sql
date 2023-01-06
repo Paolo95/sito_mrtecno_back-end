@@ -5,9 +5,9 @@ VALUES
 
 INSERT INTO `product` (`id`, `cover`, `product_name`, `photo_1`, `photo_2`, `photo_3`, `category`, `brandName`, `price`, `prod_description`, `CPU`, `RAM`, `HDD`, `graphics_card`, `stars`, `discount`, `qtyInStock`)
 VALUES
-        (NULL, "./images/arrivals/arrivals1.png", "iPhone 13 PRO", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "Smartphone", "iPhone", 850.00, "Descrizione iPhone","","","","",4, 20,100),
+        (NULL, "./images/arrivals/arrivals1.png", "iPhone 13 PRO", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "Smartphone", "iPhone", 850.99, "Descrizione iPhone","","","","",4, 20,100),
         (NULL, "./images/arrivals/arrivals2.png", "Samsung Galaxy S22", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "Smartphone", "Samsung", 450.00, "Descrizione Samsung","","","","",5, 15,80),
-        (NULL, "./images/arrivals/arrivals2.png", "Vivo android one", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "Smartphone", "Vivo", 120.00, "Descrizione Vivo","","","","",3, 25,100),
+        (NULL, "./images/arrivals/arrivals2.png", "Vivo android one", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "Smartphone", "Vivo", 120.90, "Descrizione Vivo","","","","",3, 25,100),
         (NULL, "./images/arrivals/arrivals2.png", "Mapple Earphones", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "Smartphone", "Samsung", 180.00, "Descrizione Samsung","","","","",5, 15,80),
         (NULL, "./images/arrivals/arrivals1.png", "Sony Light", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals1.png", "Smartphone", "Oppo", 20.00, "Descrizione Oppo","","","","",2, 20,100),
         (NULL, "./images/arrivals/arrivals2.png", "Alienware", "./images/arrivals/arrivals1.png", "./images/arrivals/arrivals2.png", "./images/arrivals/arrivals2.png", "PC", "AlienWare", 1450.00, "Descrizione Alienware","Intel core i5","8gb","1TB","NVIDIA Geforce",5, 15,80),
