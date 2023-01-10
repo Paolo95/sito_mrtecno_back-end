@@ -273,6 +273,162 @@ class Product_controller{
        
     }
 
+    async getAdminFilteredItems(filters){
+
+        if(filters.searchString !== ''){
+           
+            if (filters.orderSelected === 'Migliori'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,
+                        product_name: {
+                            [Op.like]: filters.searchString + '%',
+                        }                      
+                    },
+                    order: [
+                        ['stars', 'DESC']
+                    ],
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'Crescente'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,  
+                        product_name: {
+                            [Op.like]: filters.searchString + '%',
+                        }                          
+                    },
+                    order: [
+                        ['price', 'ASC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'Decrescente'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,
+                        product_name: {
+                            [Op.like]: filters.searchString + '%',
+                        }                         
+                    },
+                    order: [
+                        ['price', 'DESC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'A-Z'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,
+                        product_name: {
+                            [Op.like]: filters.searchString + '%',
+                        }                               
+                    },
+                    order: [
+                        ['product_name', 'ASC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            } else if ( filters.orderSelected === 'Z-A'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,
+                        product_name: {
+                            [Op.like]: filters.searchString + '%',
+                        }                         
+                    },
+                    order: [
+                        ['product_name', 'DESC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }
+
+        }else{
+            if (filters.orderSelected === 'Migliori'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,                     
+                    },
+                    order: [
+                        ['stars', 'DESC']
+                    ],
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'Crescente'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,                         
+                    },
+                    order: [
+                        ['price', 'ASC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'Decrescente'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,                       
+                    },
+                    order: [
+                        ['price', 'DESC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }else if (filters.orderSelected === 'A-Z'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,                             
+                    },
+                    order: [
+                        ['product_name', 'ASC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            } else if ( filters.orderSelected === 'Z-A'){
+                const productList = await Database.product.findAll({
+                    where: {
+                        category: filters.categorySelected,                       
+                    },
+                    order: [
+                        ['product_name', 'DESC']
+                    ]
+                }); 
+
+                if (productList === undefined) return [500, "Errore server"];
+            
+                return [productList];
+            }
+        }
+    }
+
     async getAvailability(prodIdBody){
         
         let isAvailable = false;
