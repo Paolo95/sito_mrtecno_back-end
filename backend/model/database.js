@@ -161,6 +161,10 @@ const Order_Product = Singleton.createSingleton.getInstance().define('order_prod
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    priceEach: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: false,
+    },
     }, { 
     timestamps: false,
     freezeTableName: true

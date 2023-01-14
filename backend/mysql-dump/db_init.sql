@@ -19,7 +19,7 @@ VALUES
         (NULL, "2022-12-12", "Ordine concluso", "Viale Piane 13 - 64013 - Corropoli", "12335131", "Note ordine...", 1),
         (NULL, "2022-12-10", "Ordine in lavorazione", "Viale Piane 16 - 64013 - Corropoli", "w5634565", "Note ordine...", 2);
 
-INSERT INTO `order_product` (`id`, `qty`, `productId`, `orderId`)
+INSERT INTO `order_product` (`id`, `qty`, `priceEach`, `productId`, `orderId`)
 VALUES
-        (NULL, 1, 1, 2),
-        (NULL, 2, 2, 2);
+        (NULL, 1, 850.99 , 1, 2),
+        (NULL, 2, 450.00 , 2, 2);

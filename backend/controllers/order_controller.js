@@ -41,22 +41,23 @@ class Order_controller{
 
         reqData.paypalDetails.purchase_units[0].items.forEach(async item => {
 
-            const productId = await Database.product.findOne({
-                attributes: ['id'],
+            const product = await Database.product.findOne({
+                attributes: ['id', 'price'],
                 where: { product_name: item.name 
                 }
             })
 
             const newOrderProduct = await Database.order_product.create({
                 qty: parseInt(item.quantity),
-                productId: productId.id,
+                priceEach: product.price,
+                productId: product.id,
                 orderId: newOrder.id,
             });
 
             await Database.product.decrement('qtyInStock', { 
                 by: newOrderProduct.qty,
                 where: {
-                    id: productId.id                    
+                    id: product.id                    
                 }
             })
         });        
@@ -78,7 +79,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * product.price) + 20)'), 'order_total']],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + 20)'), 'order_total']],
             include: [
                 {
                     attributes: ['id', 'order_date', 'order_status'],
@@ -94,7 +95,7 @@ class Order_controller{
                     required: true,
                 },
             ],
-            group: ['order.id', 'product.id'],
+            group: ['order.id'],
         });
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"]; 
@@ -125,7 +126,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * product.price) + 20)'), 'order_total'], 'qty'],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + 20)'), 'order_total'], 'qty', 'priceEach'],
             include: [
                 {
                     model: Database.order,
@@ -140,7 +141,7 @@ class Order_controller{
                     required: true,
                 },
             ],
-            group: ['order.id', 'product.id', 'qty'],
+            group: ['order.id', 'product.id', 'qty', 'priceEach'],
         });
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
