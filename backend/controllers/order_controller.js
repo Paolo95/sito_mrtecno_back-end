@@ -28,12 +28,15 @@ class Order_controller{
             reqData.paypalDetails.purchase_units[0].shipping.address.postal_code + " - " +
                 reqData.paypalDetails.purchase_units[0].shipping.address.admin_area_1;
 
+
+
         const order_date = reqData.paypalDetails.create_time.substring(0, 10);
 
         const newOrder = await Database.order.create({
             order_date: order_date,
             order_status: "Ordine in lavorazione",
             shipping_address: order_address,
+            shipping_cost: reqData.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
             shipping_code: "",
             notes: "",
             userId: userCode.id,
@@ -79,10 +82,10 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + 20)'), 'order_total']],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
             include: [
                 {
-                    attributes: ['id', 'order_date', 'order_status'],
+                    attributes: ['id', 'order_date', 'order_status', 'shipping_cost'],
                     model: Database.order,
                     where: {
                         userId: userCode.id
@@ -126,7 +129,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + 20)'), 'order_total'], 'qty', 'priceEach'],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total'], 'qty', 'priceEach'],
             include: [
                 {
                     model: Database.order,
