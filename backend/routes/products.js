@@ -71,4 +71,40 @@ router.post('/checkAvailability', tokenVerify, async (req, res) => {
 
 })
 
+router.post('/getProduct', tokenVerify, async (req,res) => {
+    
+    const result = await product_controller.getProduct(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    } 
+})
+
+router.post('/getProductShop', async (req,res) => {
+    
+    const result = await product_controller.getProductShop(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    } 
+})
+
+router.post('/editProduct', tokenVerify, async (req, res) => {
+
+    const result = await product_controller.editProduct(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    } 
+})
+
 module.exports = router;

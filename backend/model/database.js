@@ -117,6 +117,10 @@ const Product = Singleton.createSingleton.getInstance().define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    color: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
     CPU: {
         type: Sequelize.STRING,
         allowNull: true
@@ -206,6 +210,34 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
     freezeTableName: true
 });
 
+const Review = Singleton.createSingleton.getInstance().define('review', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    review_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+    },
+    review_text: {
+        type: Sequelize.STRING(2000),
+        allowNull: false,
+    },
+    review_reply: {
+        type: Sequelize.STRING(2000),
+        allowNull: true,
+    },
+    stars: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    }
+    }, { 
+    timestamps: false,
+    freezeTableName: true
+});
+
 Product.hasMany(Order_Product, {
     foreignKey: 'productId'
 });
@@ -218,9 +250,19 @@ User.hasMany(Order, {
     foreignKey: 'userId'
 });
 
+User.hasMany(Review, {
+    foreignKey: 'userId'
+});
+
+Product.hasMany(Review, {
+    foreignKey: 'productId'
+});
+
 Order_Product.belongsTo(Product);
 Order_Product.belongsTo(Order);
 Order.belongsTo(User);
+Review.belongsTo(User);
+Review.belongsTo(Product);
 
   module.exports = {
     sequelize: Singleton.createSingleton.getInstance(),
@@ -228,4 +270,5 @@ Order.belongsTo(User);
     product: Product,
     order_product: Order_Product,
     order: Order,
+    review: Review,
 };

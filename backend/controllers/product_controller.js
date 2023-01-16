@@ -453,6 +453,38 @@ class Product_controller{
         return [isAvailable];
     }
 
+    async getProduct(prodIdBody){
+
+        const product = await Database.product.findOne({
+            where: {
+                id: prodIdBody.prod_id,
+            }
+        });
+
+        if ( product === undefined ) return [404, "Prodotto non trovato!"];
+
+        const resultArray = Object.entries(product.dataValues).map(([key, value]) => ({key,value}));
+ 
+        return[resultArray];
+    }
+
+    async getProductShop(prodIdBody){
+
+        const product = await Database.product.findOne({
+            where: {
+                id: prodIdBody.prod_id,
+            }
+        });
+
+        if ( product === undefined ) return [404, "Prodotto non trovato!"];
+        
+        return[product];
+    }
+
+    async editProduct(){
+        
+    }
+
 }
 
 module.exports = Product_controller;

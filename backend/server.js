@@ -5,6 +5,7 @@ const database = require ('./model/database');
 const userRoute = require('./routes/users');
 const productRoute = require('./routes/products');
 const orderRoute = require('./routes/orders');
+const reviewRoute = require('./routes/reviews');
 const allowedOrigins = require('./config/allowedOrigins');
 
 const cors = require('cors');
@@ -26,6 +27,7 @@ app.use(cors(corsOptions));
 app.use('/api/user', userRoute);
 app.use('/api/product', productRoute);
 app.use('/api/order', orderRoute);
+app.use('/api/review', reviewRoute);
 
 app.get("/", (req,res) => {
     res.send("MrTecno server is running!");
