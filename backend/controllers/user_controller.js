@@ -369,7 +369,7 @@ class User_controller{
         
         const deleteUser = await Database.user.destroy({ where: { id: user.id } });
 
-        if (this.deleteUser === undefined) return [500, "Errore nel server!"]
+        if (deleteUser === undefined) return [500, "Errore nel server!"]
 
         return [200,"Account eliminato con successo!"]
     }

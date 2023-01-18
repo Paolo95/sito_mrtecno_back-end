@@ -481,8 +481,65 @@ class Product_controller{
         return[product];
     }
 
-    async editProduct(){
+    async editProduct(editBody){
+
+        const product = await Database.product.findOne({
+            where: {
+                id: editBody.prod_id,
+            }
+        });
+
+        if ( product === undefined ) return [404, "Prodotto non trovato!"];
         
+
+        const edit = await Database.product.update(
+            {
+                cover: editBody.cover,
+                product_name: editBody.productName,
+                photo_1: editBody.photo1,
+                photo_2: editBody.photo2,
+                photo_3: editBody.photo3,
+                category: editBody.category,
+                brandName: editBody.brandName,
+                price: editBody.price,
+                prod_description: editBody.prodDesc,
+                color: editBody.color,
+                CPU: editBody.cpu,
+                RAM: editBody.ram,
+                HDD: editBody.hdd,
+                graphics_card: editBody.graphics,
+                stars: editBody.stars,
+                discount: editBody.discount,
+                qtyInStock: editBody.qtyInStock,
+            },
+            {
+                where: {
+                    id : editBody.prod_id, 
+                }
+            }
+        )
+
+        if (edit === undefined) return [500, "Errore nel server"];
+
+        return[200, 'Modifica effettuata!']
+        
+    }
+    
+    async delProduct(delID){
+
+        const product = await Database.product.findOne({
+            where: {
+                id: delID.id,
+            }
+        });
+
+        if (!product) return [404, "Prodotto non trovato!"];
+
+        const deleteProduct = await Database.product.destroy({ where: { id: product.id } });
+
+        if (deleteProduct === undefined) return [500, "Errore nel server!"]
+        
+        return[200,'Prodotto eliminato con successo!']
     }
 
 }
