@@ -117,6 +117,10 @@ const Product = Singleton.createSingleton.getInstance().define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     color: {
         type: Sequelize.STRING,
         allowNull: true

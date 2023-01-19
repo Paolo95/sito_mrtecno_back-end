@@ -503,6 +503,7 @@ class Product_controller{
                 brandName: editBody.brandName,
                 price: editBody.price,
                 prod_description: editBody.prodDesc,
+                status: editBody.status,
                 color: editBody.color,
                 CPU: editBody.cpu,
                 RAM: editBody.ram,
