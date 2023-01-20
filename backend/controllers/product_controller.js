@@ -543,6 +543,36 @@ class Product_controller{
         return[200,'Prodotto eliminato con successo!']
     }
 
+    async newProduct(newProd){
+
+        const newProduct = await Database.product.create({
+
+            cover: newProd.cover,
+            product_name: newProd.productName,
+            photo_1: newProd.photo1,
+            photo_2: newProd.photo2,
+            photo_3: newProd.photo3,
+            category: newProd.category,
+            brandName: newProd.brandName,
+            price: newProd.price,
+            prod_description: newProd.prodDesc,
+            status: newProd.status,
+            color: newProd.color,
+            CPU: newProd.cpu,
+            RAM: newProd.ram,
+            HDD: newProd.hdd,
+            graphics_card: newProd.graphics,
+            stars: newProd.stars,
+            discount: newProd.discount,
+            qtyInStock: newProd.qtyInStock,
+
+        });
+
+        if (!newProduct) return[500, "Non è stato creato un nuovo prodotto!"];
+
+        return[200, "Il prodotto è stato creato correttamente!"];
+    }
+
 }
 
 module.exports = Product_controller;
