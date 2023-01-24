@@ -1,9 +1,11 @@
 const Database = require('../model/database');
 const dotenv = require('dotenv');
 const jwt = require("jsonwebtoken");
-const { or, Sequelize } = require('sequelize');
+const { or, Sequelize, Op } = require('sequelize');
 const { sequelize } = require('../model/database');
 const groupBy = require('group-by-with-sum');
+const moment = require('moment');
+moment().format();
 
 dotenv.config();
 
@@ -161,6 +163,166 @@ class Order_controller{
 
     }
 
+    async getOrderList(filters){
+
+        const order = await Database.order_product.findAll({
+            raw: true,
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
+            include: [
+                {
+                    model: Database.order,
+                    where: {
+                        order_status: filters.status,
+                    },
+                    required: true,
+                    attributes: ['id','order_status', 'order_date'],
+                    order: [['order.order_date', 'DESC']],
+                    include: [
+                        { 
+                            model: Database.user,
+                            required: true,
+                            attributes:['email']
+                        }
+                    ]
+                },
+                {
+                    model: Database.product,
+                    required: true,
+                    attributes: [],
+                },
+            ],
+            group: ['order.id', 'product.id', 'qty', 'priceEach'],
+            
+            
+        });
+
+        if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+
+        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
+
+        order_total_groupby.forEach((item_gb) => {
+            order.forEach((item_o) => {
+                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
+            })
+        })
+
+        return[order];
+    }
+
+    async getOrderAdminDetails(orderID){
+
+        const order = await Database.order_product.findAll({
+            raw: true,
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total'], 'qty', 'priceEach'],
+            include: [
+                {
+                    model: Database.order,
+                    where: {
+                        id: orderID,
+                    },
+                    required: true,
+                },
+                {
+                    model: Database.product,
+                    required: true,
+                },
+            ],
+            group: ['order.id', 'product.id', 'qty', 'priceEach'],
+        });
+
+        if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+
+        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
+
+        order_total_groupby.forEach((item_gb) => {
+            order.forEach((item_o) => {
+                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
+            })
+        })
+
+        return[order];
+
+    }
+
+    async editOrder(orderFE){
+
+        const order = await Database.order.findOne({
+            where: {
+                id: orderFE.id,
+            },
+        })
+        
+        if( !order ) return[404, "Ordine non trovato!"];
+
+        const editedOrder = await Database.order.update(
+            { 
+                shipping_code: orderFE.editedShippingCode, 
+                order_date: orderFE.editedDate,
+                shipping_carrier: orderFE.editedShippingCarrier,
+            },
+            {
+                where: {
+                    id: order.id
+                }
+            }         
+        )
+
+        if (!editedOrder) return[500, "Impossibile modificare l'ordine!"];
+
+        console.log(editedOrder)
+
+        return[200,"Ordine modificato con successo!"]
+
+    }
+
+    async getRecentOrders(){
+        
+        const order = await Database.order_product.findAll({
+            raw: true,
+            limit: 20,
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
+            include: [
+                {
+                    model: Database.order,
+                    required: true,
+                    attributes: ['order_status', 'order_date', 'id'],
+                    order: [['order.order_date', 'DESC']],
+                    where: {
+                        order_date: {
+                            [Op.gte]: moment().subtract(7, 'days').toDate()
+                        }
+                    },
+                    include: [
+                        { 
+                            model: Database.user,
+                            required: true,
+                            attributes:['email']
+                        }
+                    ]
+                },
+                {
+                    model: Database.product,
+                    required: true,
+                    attributes: [],
+                },
+            ],
+            group: ['order.id', 'product.id', 'qty', 'priceEach'],
+            
+            
+        });
+
+        if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+
+        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
+
+        order_total_groupby.forEach((item_gb) => {
+            order.forEach((item_o) => {
+                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
+            })
+        })
+
+        return[order];
+    }
 }
 
 module.exports = Order_controller;

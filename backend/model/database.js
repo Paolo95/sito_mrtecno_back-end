@@ -197,6 +197,10 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    shipping_carrier: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     shipping_cost: {
         type: Sequelize.FLOAT(7,2),
         allowNull: false,
