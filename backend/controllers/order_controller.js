@@ -290,6 +290,9 @@ class Order_controller{
                     where: {
                         order_date: {
                             [Op.gte]: moment().subtract(7, 'days').toDate()
+                        },
+                        order_status: {
+                            [Op.notLike]: '%Ordine concluso',  
                         }
                     },
                     include: [
