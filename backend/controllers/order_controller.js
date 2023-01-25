@@ -39,6 +39,7 @@ class Order_controller{
             order_status: "Ordine in lavorazione",
             shipping_address: order_address,
             shipping_cost: reqData.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
+            paypal_fee: reqData.paypalDetails.purchase_units[0].amount.breakdown.tax_total.value,
             shipping_code: "",
             notes: "",
             userId: userCode.id,
@@ -84,7 +85,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost + order.paypal_fee)'), 'order_total']],
             include: [
                 {
                     attributes: ['id', 'order_date', 'order_status', 'shipping_cost'],
@@ -131,7 +132,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total'], 'qty', 'priceEach'],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost + order.paypal_fee)'), 'order_total'], 'qty', 'priceEach'],
             include: [
                 {
                     model: Database.order,
@@ -167,7 +168,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost + order.paypal_fee)'), 'order_total']],
             include: [
                 {
                     model: Database.order,
@@ -213,7 +214,7 @@ class Order_controller{
 
         const order = await Database.order_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total'], 'qty', 'priceEach'],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost + order.paypal_fee)'), 'order_total'], 'qty', 'priceEach'],
             include: [
                 {
                     model: Database.order,
@@ -281,7 +282,7 @@ class Order_controller{
         const order = await Database.order_product.findAll({
             raw: true,
             limit: 20,
-            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost)'), 'order_total']],
+            attributes: [[Database.sequelize.literal('SUM((qty * priceEach) + order.shipping_cost + order.paypal_fee)'), 'order_total']],
             include: [
                 {
                     model: Database.order,

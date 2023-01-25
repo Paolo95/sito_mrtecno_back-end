@@ -200,10 +200,16 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
     shipping_carrier: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: '',
     },
     shipping_cost: {
         type: Sequelize.FLOAT(7,2),
         allowNull: false,
+    },
+    paypal_fee: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: true,
+        defaultValue: 0,
     },
     shipping_code: {
         type: Sequelize.STRING,
