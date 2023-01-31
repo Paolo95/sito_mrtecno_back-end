@@ -429,6 +429,30 @@ class Product_controller{
         }
     }
 
+    async getProductByName(filters){
+
+        console.log(filters.prod_name)
+
+        if(filters.prod_name !== ''){
+           
+            const productList = await Database.product.findAll({
+                where: {
+                    product_name: {
+                        [Op.like]: filters.prod_name + '%',
+                    }                      
+                }
+            }); 
+
+            if (productList === undefined) return [500, "Errore server"];
+                
+            return [productList];
+
+        }else{
+
+            return [];            
+        }
+    }
+
     async getAvailability(prodIdBody){
         
         let isAvailable = false;
