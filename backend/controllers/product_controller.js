@@ -49,6 +49,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -69,6 +70,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -89,6 +91,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -109,6 +112,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -129,6 +133,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -151,6 +156,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -174,6 +180,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -198,6 +205,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -222,6 +230,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
@@ -246,6 +255,7 @@ class Product_controller{
                 const shopItems = await Database.product.findAll({
                     where: {
                         category: filters.categoryChecked,
+                        status: filters.status,
                         price: {
                             [Op.gte]: filters.min,
                             [Op.lte]: filters.max,
