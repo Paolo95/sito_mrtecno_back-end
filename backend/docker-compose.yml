@@ -11,6 +11,10 @@ services:
     ports:
       - "5506:3306"
     restart: always
+    healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
     
 
   backend:
@@ -23,7 +27,8 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - mysql
+      mysql:
+              condition: service_healthy
     restart: always
 
   phpmyadmin:
