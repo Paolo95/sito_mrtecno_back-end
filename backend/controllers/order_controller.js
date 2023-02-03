@@ -180,9 +180,9 @@ class Order_controller{
                     order: [['order.order_date', 'DESC']],
                     include: [
                         { 
+                            attributes:['id', 'email'],
                             model: Database.user,
-                            required: true,
-                            attributes:['email']
+                            required: true,                            
                         }
                     ]
                 },
