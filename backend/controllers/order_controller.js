@@ -180,7 +180,7 @@ class Order_controller{
                     order: [['order.order_date', 'DESC']],
                     include: [
                         { 
-                            attributes:['id', 'email'],
+                            attributes:['email'],
                             model: Database.user,
                             required: true,                            
                         }
@@ -192,7 +192,7 @@ class Order_controller{
                     attributes: [],
                 },
             ],
-            group: ['order.id', 'product.id', 'qty', 'priceEach'],
+            group: ['order->user.id', 'order.id', 'product.id', 'qty', 'priceEach'],
             
             
         });
