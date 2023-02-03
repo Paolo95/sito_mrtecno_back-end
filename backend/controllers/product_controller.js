@@ -441,11 +441,11 @@ class Product_controller{
 
     async getProductByName(filters){
 
-        console.log(filters.prod_name)
-
         if(filters.prod_name !== ''){
            
             const productList = await Database.product.findAll({
+                
+                attributes:['id', 'product_name'],
                 where: {
                     product_name: {
                         [Op.like]: filters.prod_name + '%',
