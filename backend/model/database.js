@@ -74,6 +74,26 @@ const User = Singleton.createSingleton.getInstance().define('user', {
   freezeTableName: true
 });
 
+const Faq = Singleton.createSingleton.getInstance().define('faq', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    question: {
+        type: Sequelize.STRING(400),
+        allowNull: false
+    },
+    answer: {
+        type: Sequelize.STRING(400),
+        allowNull: false
+    },
+  }, { 
+    timestamps: false,
+    freezeTableName: true
+  });
+
 const Product = Singleton.createSingleton.getInstance().define('product', {
     id: {
         type: Sequelize.INTEGER,
@@ -285,4 +305,5 @@ Review.belongsTo(Product);
     order_product: Order_Product,
     order: Order,
     review: Review,
+    faq: Faq,
 };
