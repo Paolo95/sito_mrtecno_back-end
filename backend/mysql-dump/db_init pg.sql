@@ -28,3 +28,8 @@ INSERT INTO "review" ("id", "review_date", "review_text", "review_reply", "stars
 VALUES
         (default, '2023-01-16', 'Testo recensione', 'Testo risposta', 4, 2, 4),
         (default, '2023-01-18', 'Testo recensione 2', '', 3, 1, 2);
+
+INSERT INTO "faq" ("id", "question", "answer")
+VALUES
+        (default, 'Come funziona la permuta?', 'La permuta è molto semplice...'),
+        (default, 'Posso pagare con PayPal?', 'Certo, accettiamo pagamenti con PayPal');
