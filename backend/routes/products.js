@@ -58,6 +58,19 @@ router.post('/filteredAdminItems', tokenVerify, async (req, res) => {
     
 });
 
+router.post('/getProductOptions', async (req, res) => {
+
+    const result = await product_controller.getProductOptions(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+    
+});
+
 router.post('/checkAvailability', tokenVerify, async (req, res) => {
     
     const result = await product_controller.getAvailability(req.body);

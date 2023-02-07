@@ -61,7 +61,7 @@ class Product_controller{
                     order: [
                         ['stars', 'DESC']
                     ]
-                }); 
+                });
     
                 if (shopItems === undefined) return [500, "Errore server"];
             
@@ -282,6 +282,24 @@ class Product_controller{
         
        
     }
+
+    async getProductOptions(filters){
+
+        const shopItems = await Database.product.findAll({
+            where: {
+                category: filters.categoryChecked,
+                status: filters.status,
+                brandName: filters.brandChecked,
+                qtyInStock: {
+                    [Op.gt]: 0,
+                }                      
+            },
+        });
+
+        if (shopItems === undefined) return [500, "Errore server"];
+    
+        return [shopItems];
+    }         
 
     async getAdminFilteredItems(filters){
 
