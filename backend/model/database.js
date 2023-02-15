@@ -94,6 +94,40 @@ const Faq = Singleton.createSingleton.getInstance().define('faq', {
     freezeTableName: true
   });
 
+const Barter = Singleton.createSingleton.getInstance().define('barter', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    barter_date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+    },
+    barter_telephone: {
+        type: Sequelize.STRING(15),
+        allowNull: false,
+    },
+    barter_items: {
+        type: Sequelize.STRING(2500),
+        allowNull: false
+    },
+    status: {
+        type: Sequelize.STRING(400),
+        allowNull: false,
+        defaultValue: 'In lavorazione'
+    },
+    total: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: true,
+        defaultValue: 0,
+    },
+    }, { 
+timestamps: false,
+freezeTableName: true
+});
+
 const Product = Singleton.createSingleton.getInstance().define('product', {
     id: {
         type: Sequelize.INTEGER,
@@ -292,11 +326,21 @@ Product.hasMany(Review, {
     foreignKey: 'productId'
 });
 
+User.hasMany(Barter, {
+    foreignKey: 'userId'
+});
+
+Product.hasMany(Barter, {
+    foreignKey: 'productId'
+});
+
 Order_Product.belongsTo(Product);
 Order_Product.belongsTo(Order);
 Order.belongsTo(User);
 Review.belongsTo(User);
 Review.belongsTo(Product);
+Barter.belongsTo(Product)
+Barter.belongsTo(User);
 
   module.exports = {
     sequelize: Singleton.createSingleton.getInstance(),
@@ -306,4 +350,5 @@ Review.belongsTo(Product);
     order: Order,
     review: Review,
     faq: Faq,
+    barter: Barter,
 };

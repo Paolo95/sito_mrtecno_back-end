@@ -33,3 +33,10 @@ INSERT INTO `faq` (`id`, `question`, `answer`)
 VALUES
         (NULL, "Come funziona la permuta?", "La permuta è molto semplice..."),
         (NULL, "Posso pagare con PayPal?", "Certo, accettiamo pagamenti con PayPal");
+
+INSERT INTO `barter` (`id`, `barter_date`, `barter_telephone`, `barter_items`, `status`, `total`, `userId`, `productId`)
+VALUES
+        (NULL, "2023-02-01", "3383232123", "", "In lavorazione", 0, 1, 2),
+        (NULL, "2023-01-21", "3383535353", "", "Valutazione effettuata", 200.00, 2, 3),
+        (NULL, "2023-02-12", "3397373712", "", "In lavorazione", 0, 1, 1),
+        (NULL, "2023-01-12", "3391212311", "", "Oggetti spediti", 300.00, 2, 4);

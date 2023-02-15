@@ -7,6 +7,7 @@ const productRoute = require('./routes/products');
 const orderRoute = require('./routes/orders');
 const reviewRoute = require('./routes/reviews');
 const faqRoute = require('./routes/faqs');
+const barterRoute = require('./routes/barter');
 const allowedOrigins = require('./config/allowedOrigins');
 
 const cors = require('cors');
@@ -30,6 +31,7 @@ app.use('/api/product', productRoute);
 app.use('/api/order', orderRoute);
 app.use('/api/review', reviewRoute);
 app.use('/api/faq', faqRoute);
+app.use('/api/barter', barterRoute);
 
 app.get("/", (req,res) => {
     res.send("MrTecno server is running!");
