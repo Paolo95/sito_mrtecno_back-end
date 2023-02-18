@@ -53,6 +53,17 @@ class Barter_controller{
         return[barterStatus];
     }
 
+    async barterTotal(bodyFE){
+
+        const barterTotal = await Database.barter.findOne({
+            attributes: ['total'],
+            where: { id: bodyFE.body.id}});
+        
+        if (!barterTotal) return [404, "Permuta non trovata"];
+
+        return[barterTotal];
+    }
+
 }
 
 module.exports = Barter_controller;
