@@ -64,6 +64,38 @@ class Barter_controller{
         return[barterTotal];
     }
 
+    async barterInfo(bodyFE){
+
+        const productId = await Database.barter.findOne({
+            attributes: ['productId'],
+            where: {
+                id: bodyFE.id
+            }
+        })
+
+        if(!productId) return [404, "Prodotto non trovato!"]
+
+        const barterInfo = await Database.barter.findOne({
+            raw: true,
+            include: [
+                {
+                    attributes: ['product_name', 'status'],
+                    model: Database.product,
+                    where: {
+                        id: productId.productId
+                    },
+                    required: true,
+                },
+            ],
+            where: { 
+                id: bodyFE.id
+            }});
+        
+        if (!barterInfo) return [404, "Permuta non trovata"];
+
+        return[barterInfo];
+    }
+
 }
 
 module.exports = Barter_controller;

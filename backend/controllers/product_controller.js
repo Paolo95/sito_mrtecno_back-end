@@ -457,7 +457,7 @@ class Product_controller{
         }
     }
 
-    async getProductByName(filters){
+    async getProductListByName(filters){
 
         if(filters.prod_name !== ''){
            
@@ -623,6 +623,20 @@ class Product_controller{
         if (!newProduct) return[500, "Non è stato creato un nuovo prodotto!"];
 
         return[200, "Il prodotto è stato creato correttamente!"];
+    }
+
+    async productPrice(productName){
+
+        const productPrice = await Database.product.findOne({
+            attributes: ['price'],
+            where: {
+                product_name: productName.prodName
+            }
+        });
+
+        if(!productPrice) return [404, "Prodotto non trovato!"];
+
+        return[productPrice];
     }
 
 }

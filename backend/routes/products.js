@@ -96,9 +96,9 @@ router.post('/getProduct', tokenVerify, async (req,res) => {
     } 
 })
 
-router.post('/getProductByName', async (req,res) => {
+router.post('/getProductListByName', async (req,res) => {
     
-    const result = await product_controller.getProductByName(req.body);
+    const result = await product_controller.getProductListByName(req.body);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);
@@ -148,6 +148,19 @@ router.post('/delProduct', tokenVerify, async (req, res) => {
 router.post('/newProduct', tokenVerify, async (req, res) => {
 
     const result = await product_controller.newProduct(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    } 
+
+})
+
+router.post('/productPrice', async (req, res) => {
+
+    const result = await product_controller.productPrice(req.body);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);
