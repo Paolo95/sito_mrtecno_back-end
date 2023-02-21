@@ -96,6 +96,24 @@ class Barter_controller{
         return[barterInfo];
     }
 
+    async barterAccepted(bodyFE){
+        
+        const barterUpdated = await Database.barter.update(
+            {
+              status: "Pagamento effettuato",
+            },
+            {
+              where: { 
+                id: bodyFE.barterCode,
+            },
+            }
+          );
+
+        if (!barterUpdated) return [500, "Errore nel server!"];
+
+        return[barterUpdated];
+    }
+
 }
 
 module.exports = Barter_controller;

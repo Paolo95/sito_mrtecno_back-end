@@ -118,10 +118,35 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: false,
         defaultValue: 'In lavorazione'
     },
+    paypal_fee: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: true,
+        defaultValue: 0,
+    },
+    shipping_code: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: true,
+        defaultValue: 0,
+    },
+    shipping_carrier: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+    },
+    shipping_code: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+    },
     total: {
         type: Sequelize.FLOAT(7,2),
         allowNull: true,
         defaultValue: 0,
+    },
+    notes: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: '',
     },
     }, { 
 timestamps: false,
@@ -272,6 +297,7 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
     notes: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: '',
     },
     }, { 
     timestamps: false,
