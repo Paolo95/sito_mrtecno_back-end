@@ -16,8 +16,8 @@ VALUES
 
 INSERT INTO `order` (`id`, `order_date`, `order_status`, `shipping_address`, `shipping_carrier`, `shipping_cost`, `paypal_fee`, `shipping_code`, `notes`, `userId`)
 VALUES
-        (NULL, "2022-12-12", "Ordine concluso", "Viale Piane 13 - 64013 - Corropoli", "GLS", 9.99 , 10.23 , "12335131", "Note ordine...", 2),
-        (NULL, "2022-12-10", "Ordine in lavorazione", "Viale Piane 16 - 64013 - Corropoli", "GLS", 9.99 , 3.88, "w5634565", "Note ordine...", 2);
+        (NULL, "2022-12-12", "Concluso", "Viale Piane 13 - 64013 - Corropoli", "GLS", 9.99 , 10.23 , "12335131", "Note ordine...", 2),
+        (NULL, "2022-12-10", "In lavorazione", "Viale Piane 16 - 64013 - Corropoli", "GLS", 9.99 , 3.88, "w5634565", "Note ordine...", 2);
 
 INSERT INTO `order_product` (`id`, `qty`, `priceEach`, `productId`, `orderId`)
 VALUES
