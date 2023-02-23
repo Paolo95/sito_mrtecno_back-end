@@ -114,6 +114,32 @@ class Barter_controller{
         return[barterUpdated];
     }
 
+    async barterList(bodyFE){
+
+        const barter = await Database.barter.findAll({
+            raw: true,
+            attributes: ['id', 'status', 'total'],
+            include: [
+                { 
+                    attributes:['email'],
+                    model: Database.user,
+                    required: true,                            
+                }
+            ],
+            where: [
+                {
+                    status: bodyFE.status,
+                }
+            ]
+        });
+
+        console.log(JSON.stringify(barter))
+
+        if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
+        
+        return[barter];
+    }
+
 }
 
 module.exports = Barter_controller;
