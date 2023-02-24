@@ -138,6 +138,11 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: false,
         defaultValue: '',
     },
+    shipping_cost: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: false,
+        defaultValue: 0,
+    },
     total: {
         type: Sequelize.FLOAT(7,2),
         allowNull: true,

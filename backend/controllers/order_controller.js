@@ -271,8 +271,6 @@ class Order_controller{
 
         if (!editedOrder) return[500, "Impossibile modificare l'ordine!"];
 
-        console.log(editedOrder)
-
         return[200,"Ordine modificato con successo!"]
 
     }

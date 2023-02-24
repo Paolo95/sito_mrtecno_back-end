@@ -118,7 +118,7 @@ class Barter_controller{
 
         const barter = await Database.barter.findAll({
             raw: true,
-            attributes: ['id', 'status', 'total'],
+            attributes: ['id', 'status', 'total', 'barter_date', 'barter_items'],
             include: [
                 { 
                     attributes:['email'],
@@ -130,15 +130,61 @@ class Barter_controller{
                 {
                     status: bodyFE.status,
                 }
+            ],
+            order: [
+                ['barter_date', 'DESC']
             ]
+            
         });
-
-        console.log(JSON.stringify(barter))
 
         if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
         
         return[barter];
     }
+
+    async barterDetails(barterID){
+
+        const barter = await Database.barter.findAll({
+            where: {
+                id: barterID,
+            }
+        })
+        return [barter];
+    }
+
+    async editBarter(bodyFE){
+
+        console.log(bodyFE)
+
+        const barter = await Database.barter.findOne({
+            where: {
+                id: bodyFE.id,
+            },
+        })
+        
+        if( !barter ) return[404, "Permuta non trovata!"];
+
+        const editedBarter = await Database.barter.update(
+            { 
+                shipping_code: bodyFE.editedShippingCode, 
+                barter_date: bodyFE.editedDate,
+                shipping_carrier: bodyFE.editedShippingCarrier,
+                status: bodyFE.editedStatus,
+                total: bodyFE.editedTotal,
+            },
+            {
+                where: {
+                    id: barter.id
+                }
+            }         
+        )
+
+        if (!editedBarter) return[500, "Impossibile modificare la permuta!"];
+
+        return[200,"Permuta modificata con successo!"];
+
+    }
+
 
 }
 

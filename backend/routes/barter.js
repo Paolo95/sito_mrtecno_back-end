@@ -63,9 +63,34 @@ router.post('/barterAccepted', tokenVerify, async (req, res) => {
         res.json(result[0]);
     }
 })
+
 router.post('/barterList', tokenVerify, async (req, res) => {
     
     const result = await barter_controller.barterList(req.body);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+})
+
+router.post('/barterDetails/:barterID', tokenVerify, async (req, res) => {
+    
+    const result = await barter_controller.barterDetails(req.params.barterID);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+})
+
+router.post('/editBarter', tokenVerify, async (req, res) => {
+    
+    const result = await barter_controller.editBarter(req.body);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);

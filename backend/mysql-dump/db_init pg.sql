@@ -34,9 +34,9 @@ VALUES
         (default, 'Come funziona la permuta?', 'La permuta è molto semplice...'),
         (default, 'Posso pagare con PayPal?', 'Certo, accettiamo pagamenti con PayPal');
 
-INSERT INTO "barter" ("id", "barter_date", "barter_telephone", "barter_items", "status", "paypal_fee", "shipping_code", "shipping_carrier", "total", "notes", "userId", "productId")
+INSERT INTO "barter" ("id", "barter_date", "barter_telephone", "barter_items", "status", "paypal_fee", "shipping_code", "shipping_carrier", "shipping_cost","total", "notes", "userId", "productId")
 VALUES
-        (default, '2023-02-01', '3383232123', '', 'In lavorazione', 0, '', '', 0, '', 1, 2),
-        (default, '2023-01-21', '3383535353', '', 'Valutazione effettuata', 0, '', '', 200.00, '', 2, 3),
-        (default, '2023-02-12', '3397373712', '', 'In lavorazione', 0, '', '', 0, '', 1, 1),
-        (default, '2023-01-12', '3391212311', '', 'Oggetti spediti', 0, '', '', 300.00, '', 2, 4);
+        (default, '2023-02-01', '3383232123', '', 'In lavorazione', 0, '', '', 9.99, 90.00, '', 1, 2),
+        (default, '2023-01-21', '3383535353', '', 'Valutazione effettuata', 0, '', '', 9.99, 200.00, '', 2, 3),
+        (default, '2023-02-12', '3397373712', '', 'In lavorazione', 0, '', '', 19.99, 60.00, '', 1, 1),
+        (default, '2023-01-12', '3391212311', '', 'Oggetti spediti', 0, '', '', 9.99, 300.00, '', 2, 4);
