@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const Faq_controller = require('../controllers/faq_controller');
+const isAdmin = require('../middlewares/isAdmin');
 const faq_controller = new Faq_controller();
 const tokenVerify = require('../middlewares/tokenVerify');
 
@@ -28,7 +29,7 @@ router.post('/newFaq', tokenVerify, async (req, res) => {
     }
 })
 
-router.post('/updateFaq', tokenVerify, async (req, res) => {
+router.post('/updateFaq', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await faq_controller.updateFaq(req.body);
 

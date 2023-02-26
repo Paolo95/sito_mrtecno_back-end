@@ -44,7 +44,7 @@ class Faq_controller{
             }         
         )
 
-        if (!editedFaq) return[500, "Errore: la FAQ non è stata modificata!"]
+        if (!editedFaq[0]) return[500, "Errore: la FAQ non è stata modificata!"]
 
         return [200, "La FAQ è stata modificata correttamente!"];
     }
