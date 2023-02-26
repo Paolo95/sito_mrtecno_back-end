@@ -23,7 +23,7 @@ class Order_controller{
             }
         });
 
-        if (userCode === undefined) return [404, "Utente non trovato!"];
+        if ( !userCode ) return [404, "Utente non trovato!"];
 
         const order_address = 
         reqData.paypalDetails.purchase_units[0].shipping.address.address_line_1 + " - " +
@@ -81,7 +81,7 @@ class Order_controller{
             }
         });
 
-        if (userCode === undefined) return [404, "Utente non trovato"] 
+        if ( !userCode ) return [404, "Utente non trovato!"] 
 
         const order = await Database.order_product.findAll({
             raw: true,
@@ -128,7 +128,7 @@ class Order_controller{
             }
         });
 
-        if (userCode === undefined) return [404, "Utente non trovato"] 
+        if ( !userCode ) return [404, "Utente non trovato!"] 
 
         const order = await Database.order_product.findAll({
             raw: true,
@@ -247,6 +247,9 @@ class Order_controller{
 
     async editOrder(orderFE){
 
+        if (!orderFE.id || !orderFE.editedShippingCode || !orderFE.editedDate || !orderFE.editedShippingCarrier ||
+                !orderFE.editedStatus) return [500, "Errore, richiesta non formulata correttamente!"];
+
         const order = await Database.order.findOne({
             where: {
                 id: orderFE.id,
@@ -269,9 +272,9 @@ class Order_controller{
             }         
         )
 
-        if (!editedOrder) return[500, "Impossibile modificare l'ordine!"];
+        if (!editedOrder[0]) return[500, "Errore, ordine non modificato!"];
 
-        return[200,"Ordine modificato con successo!"]
+        return[200,"Ordine modificato con successo!"];
 
     }
 

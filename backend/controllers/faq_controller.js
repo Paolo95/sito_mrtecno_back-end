@@ -19,18 +19,22 @@ class Faq_controller{
 
     async newFaq(bodyFE){
 
+        if (!bodyFE.newQuestion || !bodyFE.newAnswer) return [500, "Errore, richiesta non formulata correttamente!"];
+
         const newFaq = await Database.faq.create({
             
             question: bodyFE.newQuestion,
             answer: bodyFE.newAnswer,
         });
 
-        if ( !newFaq ) return [500, "Errore server, impossibile creare la faq!"];
+        if ( !newFaq ) return [500, "Errore, impossibile creare la faq!"];
 
         return [200, "La FAQ è stata creata correttamente!"];
     }
     
     async updateFaq(bodyFE){
+
+        if (!bodyFE.question || !bodyFE.answer) return [500, "Errore, richiesta non formulata correttamente!"];
 
         const editedFaq = await Database.faq.update(
             { 
@@ -50,6 +54,8 @@ class Faq_controller{
     }
     
     async deleteFaq(bodyFE){
+
+        if (!bodyFE.id) return [500, "Errore, richiesta non formulata correttamente!"];
 
         const deletedFaq = await Database.faq.destroy({
             where: {

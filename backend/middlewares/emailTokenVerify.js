@@ -15,7 +15,7 @@ function emailTokenVerify(req, res, next){
         next();
 
     } catch(err){
-        return res.status(403).send('ERRORE: Token non valido: ');
+        return res.status(403).send('ERRORE: Token non valido!');
     }
 
 }

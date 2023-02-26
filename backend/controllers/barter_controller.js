@@ -154,7 +154,9 @@ class Barter_controller{
 
     async editBarter(bodyFE){
 
-        console.log(bodyFE)
+        if ( !bodyFE.id || !bodyFE.editedShippingCode || !bodyFE.editedDate ||
+                !bodyFE.editedShippingCarrier || !bodyFE.editedStatus ||
+                    !bodyFE.editedTotal) return [500, 'Errore, la richiesta non è formulata correttamente!']
 
         const barter = await Database.barter.findOne({
             where: {
@@ -179,7 +181,7 @@ class Barter_controller{
             }         
         )
 
-        if (!editedBarter) return[500, "Impossibile modificare la permuta!"];
+        if (!editedBarter[0]) return[500, "Errore, permuta non modificata!"];
 
         return[200,"Permuta modificata con successo!"];
 

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const tokenVerify = require('../middlewares/tokenVerify');
+const isAdmin = require('../middlewares/isAdmin');
 
 const Barter_controller = require('../controllers/barter_controller');
 const barter_controller = new Barter_controller();
@@ -88,7 +89,7 @@ router.post('/barterDetails/:barterID', tokenVerify, async (req, res) => {
     }
 })
 
-router.post('/editBarter', tokenVerify, async (req, res) => {
+router.post('/editBarter', tokenVerify, isAdmin , async (req, res) => {
     
     const result = await barter_controller.editBarter(req.body);
 

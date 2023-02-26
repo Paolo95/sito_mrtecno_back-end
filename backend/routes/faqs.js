@@ -17,7 +17,7 @@ router.post('/getFaqs', async (req, res) => {
     }
 })
 
-router.post('/newFaq', tokenVerify, async (req, res) => {
+router.post('/newFaq', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await faq_controller.newFaq(req.body);
 
@@ -41,7 +41,7 @@ router.post('/updateFaq', tokenVerify, isAdmin, async (req, res) => {
     }
 })
 
-router.post('/deleteFaq', tokenVerify, async (req, res) => {
+router.post('/deleteFaq', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await faq_controller.deleteFaq(req.body);
 

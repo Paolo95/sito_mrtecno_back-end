@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const tokenVerify = require('../middlewares/tokenVerify');
+const isAdmin = require('../middlewares/isAdmin');
 const Order_controller = require('../controllers/order_controller');
 const order_controller = new Order_controller();
 
@@ -68,7 +69,7 @@ router.post('/orderAdminDetails/:orderID', tokenVerify, async (req, res) => {
     
 });
 
-router.post('/editOrder', tokenVerify, async(req, res) => {
+router.post('/editOrder', tokenVerify, isAdmin ,async(req, res) => {
 
     const result = await order_controller.editOrder(req.body);
 

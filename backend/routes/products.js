@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const tokenVerify = require('../middlewares/tokenVerify');
+const isAdmin = require('../middlewares/isAdmin');
 
 const Product_controller = require('../controllers/product_controller');
 
@@ -121,7 +122,7 @@ router.post('/getProductShop', async (req,res) => {
     } 
 })
 
-router.post('/editProduct', tokenVerify, async (req, res) => {
+router.post('/editProduct', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await product_controller.editProduct(req.body);
 
@@ -133,7 +134,7 @@ router.post('/editProduct', tokenVerify, async (req, res) => {
     } 
 })
 
-router.post('/delProduct', tokenVerify, async (req, res) => {
+router.post('/delProduct', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await product_controller.delProduct(req.body);
 
@@ -145,7 +146,7 @@ router.post('/delProduct', tokenVerify, async (req, res) => {
     } 
 })
 
-router.post('/newProduct', tokenVerify, async (req, res) => {
+router.post('/newProduct', tokenVerify, isAdmin, async (req, res) => {
 
     const result = await product_controller.newProduct(req.body);
 

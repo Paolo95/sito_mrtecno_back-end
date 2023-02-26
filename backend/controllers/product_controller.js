@@ -21,7 +21,7 @@ class Product_controller{
             ]    
         })
 
-        if (categories === undefined) return [500, "Errore server"];
+        if ( !categories ) return [500, "Errore server"];
         
         return [categories];
     }
@@ -37,7 +37,7 @@ class Product_controller{
             }
         }) 
         
-        if (brands === undefined) return [500, "Errore server"];
+        if ( !brands ) return [500, "Errore server"];
         
         return [brands];
     }
@@ -63,7 +63,7 @@ class Product_controller{
                     ]
                 });
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 1){
@@ -84,7 +84,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 2){
@@ -105,7 +105,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 3){
@@ -126,7 +126,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             } else if ( filters.orderChoice === 4){
@@ -147,7 +147,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }
@@ -173,7 +173,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 1){
@@ -198,7 +198,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 2){
@@ -223,7 +223,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             }else if (filters.orderChoice === 3){
@@ -248,7 +248,7 @@ class Product_controller{
                     ]
                 }); 
     
-                if (shopItems === undefined) return [500, "Errore server"];
+                if ( !shopItems ) return [500, "Errore server"];
             
                 return [shopItems];
             } else if ( filters.orderChoice === 4){
@@ -275,7 +275,7 @@ class Product_controller{
 
         }        
 
-            if (shopItems === undefined) return [500, "Errore server"];
+            if ( !shopItems ) return [500, "Errore server"];
         
             return [shopItems];
         }
@@ -296,7 +296,7 @@ class Product_controller{
             },
         });
 
-        if (shopItems === undefined) return [500, "Errore server"];
+        if ( !shopItems ) return [500, "Errore server"];
     
         return [shopItems];
     }         
@@ -318,7 +318,7 @@ class Product_controller{
                     ],
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'Crescente'){
@@ -334,7 +334,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'Decrescente'){
@@ -350,7 +350,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'A-Z'){
@@ -366,7 +366,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             } else if ( filters.orderSelected === 'Z-A'){
@@ -382,7 +382,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }
@@ -398,7 +398,7 @@ class Product_controller{
                     ],
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'Crescente'){
@@ -411,7 +411,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'Decrescente'){
@@ -424,7 +424,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }else if (filters.orderSelected === 'A-Z'){
@@ -437,7 +437,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             } else if ( filters.orderSelected === 'Z-A'){
@@ -450,7 +450,7 @@ class Product_controller{
                     ]
                 }); 
 
-                if (productList === undefined) return [500, "Errore server"];
+                if ( !productList ) return [500, "Errore server"];
             
                 return [productList];
             }
@@ -471,7 +471,7 @@ class Product_controller{
                 }
             }); 
 
-            if (productList === undefined) return [500, "Errore server"];
+            if ( !productList ) return [500, "Errore server"];
                 
             return [productList];
 
@@ -513,7 +513,7 @@ class Product_controller{
             }
         });
 
-        if ( product === undefined ) return [404, "Prodotto non trovato!"];
+        if ( !product ) return [404, "Prodotto non trovato!"];
 
         const resultArray = Object.entries(product.dataValues).map(([key, value]) => ({key,value}));
  
@@ -528,12 +528,18 @@ class Product_controller{
             }
         });
 
-        if ( product === undefined ) return [404, "Prodotto non trovato!"];
+        if ( !product ) return [404, "Prodotto non trovato!"];
         
         return[product];
     }
 
     async editProduct(editBody){
+
+        if (!editBody.prod_id || !editBody.cover || !editBody.productName || !editBody.photo1 || !editBody.photo2 ||
+                !editBody.photo3 || !editBody.category || !editBody.brandName || !editBody.price || !editBody.prodDesc ||
+                    !editBody.status || !editBody.color || !editBody.cpu || !editBody.ram || !editBody.hdd || 
+                        !editBody.graphics || !editBody.stars || !editBody.discount || !editBody.qtyInStock)
+                            return [500, "Errore, la richiesta non è formulata correttamente!"];
 
         const product = await Database.product.findOne({
             where: {
@@ -541,10 +547,10 @@ class Product_controller{
             }
         });
 
-        if ( product === undefined ) return [404, "Prodotto non trovato!"];
+        if ( !product ) return [404, "Prodotto non trovato!"];
         
 
-        const edit = await Database.product.update(
+        const editedProduct = await Database.product.update(
             {
                 cover: editBody.cover,
                 product_name: editBody.productName,
@@ -572,13 +578,15 @@ class Product_controller{
             }
         )
 
-        if (edit === undefined) return [500, "Errore nel server"];
+        if ( !editedProduct[0]) return [500, "Errore: prodotto non aggiornato!"];
 
         return[200, 'Modifica effettuata!']
         
     }
     
     async delProduct(delID){
+
+        if (!delID.id) return [500, "Errore, richiesta non formulata correttamente!"];
 
         const product = await Database.product.findOne({
             where: {
@@ -596,6 +604,12 @@ class Product_controller{
     }
 
     async newProduct(newProd){
+
+        if (!newProd.cover || !newProd.productName || !newProd.photo1 || !newProd.photo2 || !newProd.photo3 ||
+                !newProd.category || !newProd.brandName || !newProd.price || !newProd.prodDesc || !newProd.status ||
+                    !newProd.color || !newProd.cpu || !newProd.ram || !newProd.hdd || !newProd.graphics || !newProd.stars ||
+                        !newProd.discount || !newProd.qtyInStock) 
+                            return [500, "Errore, la richiesta non è stata formulata correttamente!"]
 
         const newProduct = await Database.product.create({
 
