@@ -9,6 +9,9 @@ class Barter_controller{
     constructor(){};
 
     async createBarter(bodyFE){
+
+        if (!bodyFE.body.telephone || !bodyFE.body.barterItem )
+            return [500, "Errore, la richiesta non è stata formulata correttamente!"];
      
         const userCode = await Database.user.findOne({
             attributes: ['id'], 
@@ -44,27 +47,33 @@ class Barter_controller{
 
     async barterStatus(bodyFE){
 
+        if(!bodyFE.body.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
+
         const barterStatus = await Database.barter.findOne({
             attributes: ['status'],
             where: { id: bodyFE.body.id}});
         
-        if (!barterStatus) return [404, "Permuta non trovata"];
+        if (!barterStatus) return [404, "Permuta non trovata!"];
 
         return[barterStatus];
     }
 
     async barterTotal(bodyFE){
 
+        if(!bodyFE.body.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
+
         const barterTotal = await Database.barter.findOne({
             attributes: ['total'],
             where: { id: bodyFE.body.id}});
         
-        if (!barterTotal) return [404, "Permuta non trovata"];
+        if (!barterTotal) return [404, "Permuta non trovata!"];
 
         return[barterTotal];
     }
 
     async barterInfo(bodyFE){
+
+        if(!bodyFE.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
 
         const productId = await Database.barter.findOne({
             attributes: ['productId'],
@@ -97,6 +106,8 @@ class Barter_controller{
     }
 
     async barterAccepted(bodyFE){
+
+        if(!bodyFE.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
         
         const barterUpdated = await Database.barter.update(
             {
@@ -115,6 +126,8 @@ class Barter_controller{
     }
 
     async barterList(bodyFE){
+
+        if(!bodyFE.status) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
 
         const barter = await Database.barter.findAll({
             raw: true,
@@ -149,6 +162,7 @@ class Barter_controller{
                 id: barterID,
             }
         })
+
         return [barter];
     }
 
