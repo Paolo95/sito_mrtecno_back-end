@@ -10,7 +10,7 @@ class Barter_controller{
 
     async createBarter(bodyFE){
 
-        if (!bodyFE.body.telephone || !bodyFE.body.barterItem )
+        if (!bodyFE.body.telephone === undefined || !bodyFE.body.barterItem === undefined)
             return [500, "Errore, la richiesta non è stata formulata correttamente!"];
      
         const userCode = await Database.user.findOne({
@@ -168,8 +168,10 @@ class Barter_controller{
 
     async editBarter(bodyFE){
 
-        if ( !bodyFE.id || !bodyFE.editedShippingCode || !bodyFE.editedDate ||
-                !bodyFE.editedShippingCarrier || !bodyFE.editedStatus ||
+        console.log(bodyFE)
+
+        if ( !bodyFE.id || !bodyFE.editedShippingCode === undefined || !bodyFE.editedDate ||
+                !bodyFE.editedShippingCarrier === undefined || !bodyFE.editedStatus ||
                     !bodyFE.editedTotal) return [500, 'Errore, la richiesta non è formulata correttamente!']
 
         const barter = await Database.barter.findOne({
