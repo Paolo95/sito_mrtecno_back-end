@@ -7,7 +7,7 @@ const productRoute = require('./routes/products');
 const orderRoute = require('./routes/orders');
 const reviewRoute = require('./routes/reviews');
 const faqRoute = require('./routes/faqs');
-const barterRoute = require('./routes/barter');
+const barterRoute = require('./routes/barters');
 const allowedOrigins = require('./config/allowedOrigins');
 
 const cors = require('cors');
