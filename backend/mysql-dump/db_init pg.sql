@@ -34,7 +34,7 @@ VALUES
         (default, 'Come funziona la permuta?', 'La permuta è molto semplice...'),
         (default, 'Posso pagare con PayPal?', 'Certo, accettiamo pagamenti con PayPal');
 
-INSERT INTO "barter" ("id", "barter_date", "barter_telephone", "barter_items", "status", "paypal_fee", "shipping_code", "shipping_carrier", "shipping_cost","total", "notes", "userId", "productId")
+INSERT INTO "barter" ("id", "barter_date", "barter_telephone", "barter_items", "status", "paypal_fee", "shipping_code", "shipping_carrier", "shipping_cost", "total", "notes", "userId", "productId")
 VALUES
         (default, '2023-02-01', '3383232123', '{"0":{"name":"zf","description":"dzfv"}}', 'In lavorazione', 0, '', '', 9.99, 90.00, '', 1, 2),
         (default, '2023-01-21', '3383535353', '{"0":{"name":"zf","description":"dzfv"}}', 'Valutazione effettuata', 0, '', '', 9.99, 200.00, '', 2, 3),

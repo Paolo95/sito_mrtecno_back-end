@@ -155,6 +155,29 @@ class Barter_controller{
         return[barter];
     }
 
+    async userBarterList(bodyFE){
+
+        const userCode = await Database.user.findOne({
+            where: {
+                username: bodyFE.user.UserInfo.username
+            }
+        })
+
+        if(!userCode) return [404, "Utente non trovato!"];
+
+        const barter = await Database.barter.findAll({
+            raw: true,
+            attributes: ['id', 'status', 'total', 'barter_date'],
+            where: {
+                userId: userCode.id
+            }            
+        });
+
+        if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
+        
+        return[barter];
+    }
+
     async barterDetails(barterID){
 
         const barter = await Database.barter.findAll({
