@@ -41,6 +41,7 @@ class Order_controller{
             shipping_cost: reqData.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
             paypal_fee: reqData.paypalDetails.purchase_units[0].amount.breakdown.tax_total.value,
             shipping_code: "",
+            shipping_type: reqData.pickup ? 'Ritiro in sede' : 'Corriere',
             notes: "",
             userId: userCode.id,
         });

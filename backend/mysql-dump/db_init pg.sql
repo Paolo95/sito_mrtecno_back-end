@@ -14,10 +14,10 @@ VALUES
         (default, '/images/products/7/arrivals2.png', 'HP Office Desktop PC', '/images/products/7/arrivals1.png', '/images/products/7/arrivals1.png', '/images/products/7/arrivals1.png', 'PC', 'HP', 820.00, 'Descrizione PC HP','Nuovo', '','','','','',3, 25,100),
         (default, '/images/products/8/arrivals2.png', 'Tablet Android', '/images/products/8/arrivals2.png', '/images/products/8/arrivals2.png', '/images/products/8/arrivals2.png', 'Tablet', 'Samsung', 180.00, 'Descrizione Tablet','Nuovo', '','','','','',5, 15,80);
 
-INSERT INTO "order" ("id", "order_date", "order_status", "shipping_address", "shipping_carrier", "shipping_cost", "paypal_fee", "shipping_code", "notes", "userId")
+INSERT INTO "order" ("id", "order_date", "order_status", "shipping_type","shipping_address", "shipping_carrier", "shipping_cost", "paypal_fee", "shipping_code", "notes", "userId")
 VALUES
-        (default, '2022-12-12', 'Concluso', 'Viale Piane 13 - 64013 - Corropoli', 'GLS', 9.99 , 10.23 , '12335131', 'Note ordine...', 2),
-        (default, '2022-12-10', 'In lavorazione', 'Viale Piane 16 - 64013 - Corropoli', 'GLS', 9.99 , 3.88, 'w5634565', 'Note ordine...', 2);
+        (default, '2022-12-12', 'Concluso', 'Corriere', 'Viale Piane 13 - 64013 - Corropoli', 'GLS', 9.99 , 10.23 , '12335131', 'Note ordine...', 2),
+        (default, '2022-12-10', 'In lavorazione', 'Corriere', 'Viale Piane 16 - 64013 - Corropoli', 'GLS', 9.99 , 3.88, 'w5634565', 'Note ordine...', 2);
 
 INSERT INTO "order_product" ("id", "qty", "priceEach", "productId", "orderId")
 VALUES

@@ -277,6 +277,11 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    shipping_type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'Corriere',
+    },
     shipping_address: {
         type: Sequelize.STRING,
         allowNull: false,
