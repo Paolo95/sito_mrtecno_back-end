@@ -178,20 +178,36 @@ class Barter_controller{
         return[barter];
     }
 
-    async barterDetails(barterID){
+    async barterDetailsWithProdInfo(barterID){
 
-        const barter = await Database.barter.findAll({
+        const barterProdID = await Database.barter.findOne({
+            attributes: ['productId'],
             where: {
                 id: barterID,
             }
+        });
+
+        const barter = await Database.barter.findAll({
+            raw: true,
+            where: {
+                id: barterID,
+            },
+            include: [
+                {
+                    attributes:['product_name', 'price'],
+                    model: Database.product,
+                    required: true,  
+                    where: {
+                        id: barterProdID.productId
+                    }
+                },
+            ]
         })
 
         return [barter];
     }
 
     async editBarter(bodyFE){
-
-        console.log(bodyFE)
 
         if ( !bodyFE.id || !bodyFE.editedShippingCode === undefined || !bodyFE.editedDate ||
                 !bodyFE.editedShippingCarrier === undefined || !bodyFE.editedStatus ||

@@ -101,6 +101,18 @@ router.post('/barterDetails/:barterID', tokenVerify, async (req, res) => {
     }
 })
 
+router.post('/barterDetailsWithProduct/:barterID', tokenVerify, async (req, res) => {
+    
+    const result = await barter_controller.barterDetailsWithProdInfo(req.params.barterID);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+})
+
 router.post('/editBarter', tokenVerify, isAdmin , async (req, res) => {
     
     const result = await barter_controller.editBarter(req.body);
