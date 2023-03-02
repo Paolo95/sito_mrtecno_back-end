@@ -39,4 +39,4 @@ VALUES
         (NULL, "2023-02-01", "3383232123", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "", "", 9.99, 60.00, "", 1, 2),
         (NULL, "2023-01-21", "3383535353", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Valutazione effettuata", 0, "", "", 9.99, 200.00, "", 2, 3),
         (NULL, "2023-02-12", "3397373712", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "", "", 19.99, 40.00, "", 1, 1),
-        (NULL, "2023-01-12", "3391212311", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Oggetti spediti", 0, "", "", 9.99, 300.00, "", 2, 4);
+        (NULL, "2023-01-12", "3391212311", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Oggetti ricevuti", 0, "", "", 9.99, 300.00, "", 2, 4);

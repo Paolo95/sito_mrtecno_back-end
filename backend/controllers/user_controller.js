@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const { Op } = require('sequelize');
 
 dotenv.config();
 
@@ -359,13 +360,28 @@ class User_controller{
 
         let orderPending = false;
 
-        orderFiltered.forEach((item) =>{
+        orderFiltered.forEach((item) => {
             if (item['order.order_status'] === 'Ordine in lavorazione' || item['order.order_status'] === 'Ordine in spedizione'){
                 orderPending = true;
             }
         })
 
         if (orderPending) { return [403, "Impossibile eliminare l'account se hai un ordine in lavorazione e/o spedizione!"] };
+        
+        const barterPending = await Database.barter.count({
+            where: {
+                userId: user.id,
+                [Op.or]: [
+                    { status: 'In lavorazione',},
+                    { status: 'Valutazione effettuata',},
+                    { status: 'Pagamento effettuato',},
+                    { status: 'Oggetti ricevuti',},
+                    { status: 'Prodotto spedito',},
+                ]
+            }
+        }); 
+
+        if (barterPending > 0) return [403, "Impossibile eliminare l'account se hai una permuta non conclusa!"]
         
         const deleteUser = await Database.user.destroy({ where: { id: user.id } });
 
