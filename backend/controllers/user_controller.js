@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const { Op } = require('sequelize');
+const MailGenerator = require('../utils/mailGenerator');
+const mailGenerator = new MailGenerator();
 
 dotenv.config();
 
@@ -54,7 +56,7 @@ class User_controller{
                 from: process.env.USER_EMAIL,
                 to: userFE.email,
                 subject: 'MrTecno - Conferma la tua e-mail!',
-                html: `Per favore, conferma la tua email cliccando sul link: <a href="${url}">${url}</a>`
+                html: mailGenerator.registerHTML(url),
             };
 
             let errorPresent = false;
