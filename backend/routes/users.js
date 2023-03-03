@@ -34,7 +34,12 @@ router.post('/auth', async (req, res) => {
         res.status(result[0]).send(result[1]);
     }else{
 
-        res.cookie('jwt', result[0], { domain: process.env.DOMAIN, httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('jwt', result[0], { 
+            httpOnly: true, 
+            sameSite: 'None', 
+            secure: true, 
+            maxAge: 24 * 60 * 60 * 1000 
+        });
         const accessToken = result[1];
         res.json({accessToken});
     }
@@ -62,7 +67,7 @@ router.get('/logout', async (req, res) => {
 
     const result = await user_controller.logOut(req.cookies);
 
-    res.clearCookie('jwt', { domain: process.env.DOMAIN, httpOnly: true, sameSite: 'None', secure: true });
+    res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true });
     res.status(result[0]).send(result[1]);
 });
 
