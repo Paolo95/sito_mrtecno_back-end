@@ -15,38 +15,37 @@ class Order_controller{
 
     async createOrder(reqData){
 
-        const decoded = jwt.decode(reqData.userInfo, process.env.ACCESS_TOKEN_SECRET);
-
         const userCode = await Database.user.findOne({
             attributes: ['id'],
-            where: { username: decoded.UserInfo.username 
+            where: { username: reqData.user.UserInfo.username 
             }
         });
 
         if ( !userCode ) return [404, "Utente non trovato!"];
 
         const order_address = 
-        reqData.paypalDetails.purchase_units[0].shipping.address.address_line_1 + " - " +
-            reqData.paypalDetails.purchase_units[0].shipping.address.postal_code + " - " +
-                reqData.paypalDetails.purchase_units[0].shipping.address.admin_area_1;
+        reqData.body.paypalDetails.purchase_units[0].shipping.address.address_line_1 + " - " +
+            reqData.body.paypalDetails.purchase_units[0].shipping.address.postal_code + " - " +
+                reqData.body.paypalDetails.purchase_units[0].shipping.address.admin_area_1;
 
 
 
-        const order_date = reqData.paypalDetails.create_time.substring(0, 10);
+        const order_date = reqData.body.paypalDetails.create_time.substring(0, 10);
 
         const newOrder = await Database.order.create({
             order_date: order_date,
             order_status: "Ordine in lavorazione",
             shipping_address: order_address,
-            shipping_cost: reqData.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
-            paypal_fee: reqData.paypalDetails.purchase_units[0].amount.breakdown.tax_total.value,
+            shipping_cost: reqData.body.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
+            paypal_fee: reqData.body.paypalDetails.purchase_units[0].amount.breakdown.tax_total.value,
             shipping_code: "",
-            shipping_type: reqData.pickup ? 'Ritiro in sede' : 'Corriere',
+            payment_method: 'PayPal',
+            shipping_type: reqData.body.pickup ? 'Ritiro in sede' : 'Corriere',
             notes: "",
             userId: userCode.id,
         });
 
-        reqData.paypalDetails.purchase_units[0].items.forEach(async item => {
+        reqData.body.paypalDetails.purchase_units[0].items.forEach(async item => {
 
             const product = await Database.product.findOne({
                 attributes: ['id', 'price'],
@@ -69,6 +68,54 @@ class Order_controller{
             })
         });        
 
+        return [200, "Ordine salvato correttamente!"];
+    }
+
+    async createOrderBT(reqData){
+
+        const userCode = await Database.user.findOne({
+            attributes: ['id'],
+            where: { username: reqData.user.UserInfo.username 
+            }
+        });
+
+        if ( !userCode ) return [404, "Utente non trovato!"];
+
+        const order_address = reqData.body.shipping_address + ' ' + reqData.body.hnumber + ' ' + 
+                                    reqData.body.cap + ' ' + reqData.body.city + ' ' + reqData.body.province;
+
+        const order_date = new Date().toJSON().slice(0, 10);
+
+        const newOrder = await Database.order.create({
+            order_date: order_date,
+            order_status: "Ordine in lavorazione",
+            shipping_address: order_address,
+            shipping_cost: reqData.body.shipping_cost,
+            payment_method: 'Bonifico',
+            paypal_fee: 0,
+            shipping_code: "",
+            shipping_type: reqData.body.pickup ? 'Ritiro in sede' : 'Corriere',
+            notes: "",
+            userId: userCode.id,
+        });
+        
+        reqData.body.cartItem.map(async item => {
+
+            const newOrderProduct = await Database.order_product.create({
+                qty: item.qty,
+                priceEach: item.price,
+                productId: item.id,
+                orderId: newOrder.id,
+            });
+
+            await Database.product.decrement('qtyInStock', { 
+                by: newOrderProduct.qty,
+                where: {
+                    id: item.id                    
+                }
+            })
+        });        
+        
         return [200, "Ordine salvato correttamente!"];
     }
 
@@ -115,7 +162,8 @@ class Order_controller{
             })
         })
 
-        return[order.filter((v,i,a)=>a.findIndex(v2=>(v2['order.id']===v['order.id']))===i)];
+        return[order.filter((v,i,a)=>a.findIndex(v2=>(v2['order.id']===v['order.id']))===i)
+                    .sort((a, b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
 
     }
 
@@ -208,7 +256,7 @@ class Order_controller{
             })
         })
 
-        return[order];
+        return[order.sort((a, b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
     }
 
     async getOrderAdminDetails(orderID){

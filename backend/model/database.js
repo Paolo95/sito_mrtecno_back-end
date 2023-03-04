@@ -295,6 +295,10 @@ const Order = Singleton.createSingleton.getInstance().define('order', {
         type: Sequelize.FLOAT(7,2),
         allowNull: false,
     },
+    payment_method: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     paypal_fee: {
         type: Sequelize.FLOAT(7,2),
         allowNull: true,

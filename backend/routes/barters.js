@@ -65,7 +65,7 @@ router.post('/barterAccepted', tokenVerify, async (req, res) => {
     }
 })
 
-router.post('/barterList', tokenVerify, async (req, res) => {
+router.post('/barterList', tokenVerify, isAdmin, async (req, res) => {
     
     const result = await barter_controller.barterList(req.body);
 
