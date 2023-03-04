@@ -56,7 +56,7 @@ class User_controller{
                 from: process.env.USER_EMAIL,
                 to: userFE.email,
                 subject: 'MrTecno - Conferma la tua e-mail!',
-                html: mailGenerator.registerHTML(url),
+                html: mailGenerator.register(url),
             };
 
             let errorPresent = false;
