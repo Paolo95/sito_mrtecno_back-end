@@ -44,7 +44,7 @@ class User_controller{
 
             let transporter = nodemailer.createTransport({
                 service: process.env.EMAIL_SERVICE,
-                host: 'smtp.gmail.com',
+                host: process.env.EMAIL_HOST,
                 secure: false,
                 auth: {
                     user: process.env.USER_EMAIL,
@@ -234,7 +234,7 @@ class User_controller{
 
         let transporter = nodemailer.createTransport({
             service: process.env.EMAIL_SERVICE,
-            host: 'smtp.gmail.com',
+            host: process.env.EMAIL_HOST,
             secure: false,
             auth: {
               user: process.env.USER_EMAIL,
@@ -245,9 +245,8 @@ class User_controller{
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: emailFE.recEmail,
-            subject: 'MrTecno - Conferma la modifica della password!',
-            html: `Per favore, conferma la modifica alla password cliccando sul link: <a href="${url}">${url}</a>
-                        la password provvisoria è: <b>${randomPassword}</b>`
+            subject: 'MrTecno - Password dimenticata',
+            html: mailGenerator.userRecovery(url, randomPassword),
         };
 
         let errorPresent = false;
