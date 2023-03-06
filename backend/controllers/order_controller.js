@@ -1,8 +1,9 @@
 const Database = require('../model/database');
 const dotenv = require('dotenv');
-const jwt = require("jsonwebtoken");
-const { or, Sequelize, Op } = require('sequelize');
-const { sequelize } = require('../model/database');
+const { Op } = require('sequelize');
+const MailGenerator = require('../utils/mailGenerator');
+const mailGenerator = new MailGenerator();
+const nodemailer = require("nodemailer");
 const groupBy = require('group-by-with-sum');
 const moment = require('moment');
 moment().format();
@@ -15,13 +16,13 @@ class Order_controller{
 
     async createOrder(reqData){
 
-        const userCode = await Database.user.findOne({
-            attributes: ['id'],
+        const userInfo = await Database.user.findOne({
+            attributes: ['id', 'email'],
             where: { username: reqData.user.UserInfo.username 
             }
         });
 
-        if ( !userCode ) return [404, "Utente non trovato!"];
+        if ( !userInfo ) return [404, "Utente non trovato!"];
 
         const order_address = 
         reqData.body.paypalDetails.purchase_units[0].shipping.address.address_line_1 + " - " +
@@ -34,7 +35,7 @@ class Order_controller{
 
         const newOrder = await Database.order.create({
             order_date: order_date,
-            order_status: "Ordine in lavorazione",
+            order_status: "In lavorazione",
             shipping_address: order_address,
             shipping_cost: reqData.body.paypalDetails.purchase_units[0].amount.breakdown.shipping.value,
             paypal_fee: reqData.body.paypalDetails.purchase_units[0].amount.breakdown.tax_total.value,
@@ -42,7 +43,7 @@ class Order_controller{
             payment_method: 'PayPal',
             shipping_type: reqData.body.pickup ? 'Ritiro in sede' : 'Corriere',
             notes: "",
-            userId: userCode.id,
+            userId: userInfo.id,
         });
 
         reqData.body.paypalDetails.purchase_units[0].items.forEach(async item => {
@@ -66,20 +67,54 @@ class Order_controller{
                     id: product.id                    
                 }
             })
-        });        
+        });
 
-        return [200, "Ordine salvato correttamente!"];
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo ordine',
+            html: reqData.body.pickup ? mailGenerator.orderNoShippingPayPal(reqData.body.paypalDetails.purchase_units[0]) 
+                                      : mailGenerator.orderPayPal(reqData.body.paypalDetails.purchase_units[0]),
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, "Ordine salvato correttamente!"];
+        }
+
+        
     }
 
     async createOrderBT(reqData){
 
-        const userCode = await Database.user.findOne({
-            attributes: ['id'],
+        const userInfo = await Database.user.findOne({
+            attributes: ['id', 'email'],
             where: { username: reqData.user.UserInfo.username 
             }
         });
 
-        if ( !userCode ) return [404, "Utente non trovato!"];
+        if ( !userInfo ) return [404, "Utente non trovato!"];
 
         const order_address = reqData.body.shipping_address + ' ' + reqData.body.hnumber + ' ' + 
                                     reqData.body.cap + ' ' + reqData.body.city + ' ' + reqData.body.province;
@@ -88,7 +123,7 @@ class Order_controller{
 
         const newOrder = await Database.order.create({
             order_date: order_date,
-            order_status: "Ordine in lavorazione",
+            order_status: "In lavorazione",
             shipping_address: order_address,
             shipping_cost: reqData.body.shipping_cost,
             payment_method: 'Bonifico',
@@ -96,7 +131,7 @@ class Order_controller{
             shipping_code: "",
             shipping_type: reqData.body.pickup ? 'Ritiro in sede' : 'Corriere',
             notes: "",
-            userId: userCode.id,
+            userId: userInfo.id,
         });
         
         reqData.body.cartItem.map(async item => {
@@ -114,9 +149,43 @@ class Order_controller{
                     id: item.id                    
                 }
             })
-        });        
+        });   
+
+                
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo ordine',
+            html: reqData.body.pickup ? mailGenerator.orderNoShippingBT(reqData.body) 
+                                      : mailGenerator.orderBT(reqData.body),
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
         
-        return [200, "Ordine salvato correttamente!"];
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, "Ordine salvato correttamente!"];
+        }
+        
     }
 
     async getUserOrders(req){
