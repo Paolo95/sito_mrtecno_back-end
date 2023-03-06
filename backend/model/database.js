@@ -123,17 +123,22 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: true,
         defaultValue: 0,
     },
-    shipping_code: {
-        type: Sequelize.FLOAT(7,2),
-        allowNull: true,
-        defaultValue: 0,
-    },
-    shipping_carrier: {
+    shipping_type: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',
     },
     shipping_code: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+    },
+    shipping_address: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+    },
+    shipping_carrier: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',

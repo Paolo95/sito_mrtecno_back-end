@@ -125,6 +125,30 @@ class Barter_controller{
         return[barterUpdated];
     }
 
+    async barterAcceptedBT(bodyFE){
+
+        if(!bodyFE.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
+        
+        const barterUpdated = await Database.barter.update(
+            {
+              status: "Pagamento effettuato",
+              shipping_address: bodyFE.shipping_address + ' ' + bodyFE.hnumber + ' - ' + bodyFE.cap + ' - ' + bodyFE.city,
+              shipping_carrier: "GLS",
+              shipping_cost: bodyFE.shipping_cost,
+              shipping_type: 'Corriere',
+            },
+            {
+              where: { 
+                id: bodyFE.barterCode,
+            },
+            }
+          );
+
+        if (!barterUpdated) return [500, "Errore nel server!"];
+
+        return[barterUpdated];
+    }
+
     async barterList(bodyFE){
 
         if(!bodyFE.status) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
