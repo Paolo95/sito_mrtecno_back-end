@@ -381,7 +381,8 @@ class Order_controller{
                 shipping_code: orderFE.editedShippingCode, 
                 order_date: orderFE.editedDate,
                 shipping_carrier: orderFE.editedShippingCarrier,
-                order_status: orderFE.editedStatus
+                order_status: orderFE.editedStatus,
+                notes: orderFE.notes,
             },
             {
                 where: {

@@ -252,6 +252,7 @@ class Barter_controller{
                 shipping_carrier: bodyFE.editedShippingCarrier,
                 status: bodyFE.editedStatus,
                 total: bodyFE.editedTotal,
+                notes: bodyFE.editedNotes,
             },
             {
                 where: {
