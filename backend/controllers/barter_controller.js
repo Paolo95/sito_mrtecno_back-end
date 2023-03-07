@@ -1,6 +1,8 @@
 const Database = require('../model/database');
 const dotenv = require('dotenv');
-const { sequelize } = require('../model/database');
+const MailGenerator = require('../utils/mailGenerator');
+const mailGenerator = new MailGenerator();
+const nodemailer = require("nodemailer");
 
 dotenv.config();
 
@@ -105,9 +107,9 @@ class Barter_controller{
         return[barterInfo];
     }
 
-    async barterAccepted(bodyFE){
+    async barterAccepted(reqData){
 
-        if(!bodyFE.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
+        if(!reqData.body.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
         
         const barterUpdated = await Database.barter.update(
             {
@@ -115,14 +117,54 @@ class Barter_controller{
             },
             {
               where: { 
-                id: bodyFE.barterCode,
+                id: reqData.body.barterCode,
             },
             }
           );
 
         if (!barterUpdated) return [500, "Errore nel server!"];
 
-        return[barterUpdated];
+        const userInfo = await Database.user.findOne({
+            attributes: ['email'],
+            where: { username: reqData.user.UserInfo.username 
+            }
+        });
+
+        if ( !userInfo ) return [404, "Utente non trovato!"];
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo permuta',
+            html: mailGenerator.barterPayPal(reqData),
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [barterUpdated];
+        }
+
     }
 
     async barterAcceptedBT(bodyFE){
