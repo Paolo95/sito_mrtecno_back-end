@@ -103,7 +103,7 @@ router.post('/userBarterList', tokenVerify, async (req, res) => {
 
 router.post('/barterDetails/:barterID', tokenVerify, async (req, res) => {
     
-    const result = await barter_controller.barterDetails(req.params.barterID);
+    const result = await barter_controller.barterDetailsWithProdInfo(req.params.barterID);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);
