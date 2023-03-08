@@ -1,11 +1,7 @@
 const Database = require('../model/database');
 const { Op } = require('sequelize');
-const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
 const { Sequelize } = require('sequelize');
-const MimeNode = require('nodemailer/lib/mime-node');
 
 dotenv.config();
 
@@ -15,7 +11,6 @@ class Review_controller{
 
     async getProdReview(prodIdBody){
 
-        console.log(prodIdBody.orderRevChoice)
         if (prodIdBody.orderRevChoice === 'Migliori'){
             
             const review = await Database.review.findAll({
@@ -97,6 +92,35 @@ class Review_controller{
             return [review];
         }
 
+    }
+
+    async getProdReviewStars(){
+
+        const prodStars = await Database.review.findAll({
+            raw: true,
+            attributes: ['productId', [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgStars'], [Sequelize.fn('COUNT', Sequelize.col('productId')), 'reviewCount']],
+            group: ['productId']
+        });
+
+        if(!prodStars) return[500, "Errore, impossibile trovare le informazioni delle recensioni!"];
+
+        return[prodStars]
+    }
+
+    async getProdReviewStarsByID(bodyFE){
+
+        const prodInfo = await Database.review.findAll({
+            raw: true,
+            attributes: ['productId', [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgStars'], [Sequelize.fn('COUNT', Sequelize.col('productId')), 'reviewCount']],
+            where: {
+                productId: bodyFE.prod_id,
+            },
+            group: ['productId']
+        });
+
+        if(!prodInfo) return[500, "Errore, impossibile trovare le informazioni delle recensioni!"];
+
+        return[prodInfo]
     }
 
 }

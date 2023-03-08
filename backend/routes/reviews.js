@@ -18,4 +18,28 @@ router.post('/getProdReviews', async (req, res) => {
     }
 });
 
+router.post('/getProdReviewsStars', async (req, res) => {
+
+    const result = await review_controller.getProdReviewStars(req.body);
+    
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+});
+
+router.post('/getProdReviewStarsByID', async (req, res) => {
+
+    const result = await review_controller.getProdReviewStarsByID(req.body);
+    
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+});
+
 module.exports = router;
