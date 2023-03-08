@@ -67,7 +67,7 @@ router.post('/barterAccepted', tokenVerify, async (req, res) => {
 
 router.post('/barterAcceptedBT', tokenVerify, async (req, res) => {
 
-    const result = await barter_controller.barterAcceptedBT(req.body);
+    const result = await barter_controller.barterAcceptedBT(req);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);

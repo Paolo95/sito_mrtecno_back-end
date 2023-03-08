@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const MailGenerator = require('../utils/mailGenerator');
 const mailGenerator = new MailGenerator();
 const nodemailer = require("nodemailer");
+const path = require('path');
 
 dotenv.config();
 
@@ -142,11 +143,19 @@ class Barter_controller{
             },
         });
 
+        const basePath = path.join(__dirname, '../');
+
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Riepilogo permuta',
             html: mailGenerator.barterPayPal(reqData),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
         };
 
         let errorPresent = false;
@@ -167,28 +176,73 @@ class Barter_controller{
 
     }
 
-    async barterAcceptedBT(bodyFE){
-
-        if(!bodyFE.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
-        
+    async barterAcceptedBT(reqData){
+       
         const barterUpdated = await Database.barter.update(
             {
               status: "Pagamento effettuato",
-              shipping_address: bodyFE.shipping_address + ' ' + bodyFE.hnumber + ' - ' + bodyFE.cap + ' - ' + bodyFE.city,
+              shipping_address: reqData.body.shipping_address + ' ' + reqData.body.hnumber + ' - ' + reqData.body.cap + ' - ' + reqData.body.city,
               shipping_carrier: "GLS",
-              shipping_cost: bodyFE.shipping_cost,
+              shipping_cost: reqData.body.shipping_cost,
               shipping_type: 'Corriere',
             },
             {
               where: { 
-                id: bodyFE.barterCode,
+                id: reqData.body.barterCode,
             },
             }
           );
 
         if (!barterUpdated) return [500, "Errore nel server!"];
 
-        return[barterUpdated];
+        const userInfo = await Database.user.findOne({
+            attributes: ['email'],
+            where: { username: reqData.user.UserInfo.username 
+            }
+        });
+
+        if ( !userInfo ) return [404, "Utente non trovato!"];
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo permuta',
+            html: mailGenerator.barterBT(reqData),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+            }]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [barterUpdated];
+        }
+
     }
 
     async barterList(bodyFE){

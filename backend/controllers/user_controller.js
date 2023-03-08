@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { Op } = require('sequelize');
 const MailGenerator = require('../utils/mailGenerator');
 const mailGenerator = new MailGenerator();
+const path = require('path');
 
 dotenv.config();
 
@@ -52,11 +53,23 @@ class User_controller{
                 },
                 });
 
+            const basePath = path.join(__dirname, '../');
+
             const mailOptions = {
                 from: process.env.USER_EMAIL,
                 to: userFE.email,
                 subject: 'MrTecno - Conferma la tua e-mail!',
                 html: mailGenerator.register(url),
+                attachments: [{
+                    filename: 'mrtecnoLogoLarge.png',
+                    path: basePath + '/utils/emailImages/mrtecnoLogoLarge.png',
+                    cid: 'mrtecnoLogoLarge'
+                },{
+                    filename: 'mrtecnoLogo.jpeg',
+                    path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                    cid: 'mrtecnoLogo'
+                },
+                ]
             };
 
             let errorPresent = false;
@@ -242,11 +255,22 @@ class User_controller{
             },
         });
 
+        const basePath = path.join(__dirname, '../');
+
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: emailFE.recEmail,
             subject: 'MrTecno - Password dimenticata',
             html: mailGenerator.userRecovery(url, randomPassword),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+            },{
+                filename: 'mrtecnoLogoLarge.png',
+                path: basePath + '/utils/emailImages/mrtecnoLogoLarge.png',
+                cid: 'mrtecnoLogoLarge'
+            }],
         };
 
         let errorPresent = false;

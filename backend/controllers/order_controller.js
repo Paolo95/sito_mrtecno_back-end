@@ -78,6 +78,8 @@ class Order_controller{
               pass: process.env.USER_PASS
             },
         });
+        
+        const basePath = path.join(__dirname, '../');
 
         const mailOptions = {
             from: process.env.USER_EMAIL,
@@ -85,6 +87,12 @@ class Order_controller{
             subject: 'MrTecno - Riepilogo ordine',
             html: reqData.body.pickup ? mailGenerator.orderNoShippingPayPal(reqData.body.paypalDetails.purchase_units[0]) 
                                       : mailGenerator.orderPayPal(reqData.body.paypalDetails.purchase_units[0]),
+            attachments: [{
+            filename: 'mrtecnoLogo.jpeg',
+            path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+            cid: 'mrtecnoLogo'
+            },
+            ]
         };
 
         let errorPresent = false;
@@ -162,12 +170,20 @@ class Order_controller{
             },
         });
 
+        const basePath = path.join(__dirname, '../');
+
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Riepilogo ordine',
             html: reqData.body.pickup ? mailGenerator.orderNoShippingBT(reqData.body) 
                                       : mailGenerator.orderBT(reqData.body),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
         };
 
         let errorPresent = false;
