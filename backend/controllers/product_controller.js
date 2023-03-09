@@ -535,12 +535,6 @@ class Product_controller{
 
     async editProduct(editBody){
 
-        if (!editBody.prod_id || !editBody.cover || !editBody.productName || !editBody.photo1 || !editBody.photo2 ||
-                !editBody.photo3 || !editBody.category || !editBody.brandName || !editBody.price || !editBody.prodDesc ||
-                    !editBody.status || !editBody.color || !editBody.cpu || !editBody.ram || !editBody.hdd || 
-                        !editBody.graphics || !editBody.stars || !editBody.discount || !editBody.qtyInStock)
-                            return [500, "Errore, la richiesta non è formulata correttamente!"];
-
         const product = await Database.product.findOne({
             where: {
                 id: editBody.prod_id,
@@ -586,8 +580,6 @@ class Product_controller{
     
     async delProduct(delID){
 
-        if (!delID.id) return [500, "Errore, richiesta non formulata correttamente!"];
-
         const product = await Database.product.findOne({
             where: {
                 id: delID.id,
@@ -604,12 +596,6 @@ class Product_controller{
     }
 
     async newProduct(newProd){
-
-        if (!newProd.cover || !newProd.productName || !newProd.photo1 || !newProd.photo2 || !newProd.photo3 ||
-                !newProd.category || !newProd.brandName || !newProd.price || !newProd.prodDesc || !newProd.status ||
-                    !newProd.color || !newProd.cpu || !newProd.ram || !newProd.hdd || !newProd.graphics || !newProd.stars ||
-                        !newProd.discount || !newProd.qtyInStock) 
-                            return [500, "Errore, la richiesta non è stata formulata correttamente!"]
 
         const newProduct = await Database.product.create({
 
@@ -628,7 +614,6 @@ class Product_controller{
             RAM: newProd.ram,
             HDD: newProd.hdd,
             graphics_card: newProd.graphics,
-            stars: newProd.stars,
             discount: newProd.discount,
             qtyInStock: newProd.qtyInStock,
 

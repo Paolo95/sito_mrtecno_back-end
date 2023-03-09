@@ -381,9 +381,6 @@ class Order_controller{
 
     async editOrder(orderFE){
 
-        if (!orderFE.id || !orderFE.editedShippingCode || !orderFE.editedDate || !orderFE.editedShippingCarrier ||
-                !orderFE.editedStatus) return [500, "Errore, richiesta non formulata correttamente!"];
-
         const order = await Database.order.findOne({
             where: {
                 id: orderFE.id,

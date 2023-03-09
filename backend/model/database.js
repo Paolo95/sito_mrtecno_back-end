@@ -229,10 +229,6 @@ const Product = Singleton.createSingleton.getInstance().define('product', {
     graphics_card: {
         type: Sequelize.STRING,
         allowNull: true
-    },   
-    stars: {
-        type: Sequelize.INTEGER,
-        allowNull: false
     },
     discount: {
         type: Sequelize.INTEGER,
