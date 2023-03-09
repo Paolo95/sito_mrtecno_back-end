@@ -189,7 +189,8 @@ class Review_controller{
                 ],
                 where: {
                     userId: userCode.id,
-                }
+                },
+                order: [['review_date','DESC']]
             });
 
             return[reviewList];
@@ -218,7 +219,129 @@ class Review_controller{
             userId: userCode.id,
         });
 
+        if(!newReview) return[500, "Impossibile inserire la recensione!"]
+
         return[200, "Recensione inserita correttamente!"];
+    }
+
+    async reviewListAdmin(reqData){
+
+        if (reqData.body.status === 'Da rispondere') {
+
+            const reviewList = await Database.review.findAll({
+                raw: true,
+                attributes:['id', 'review_text', 'review_reply', 'stars'],
+                where:{
+                    review_reply: '',
+                },
+                include: [
+                    {
+                        required: true,
+                        model: Database.user,
+                        attributes: ['username'],
+                    },
+                ]
+              
+            });
+
+            if(!reviewList) return[500,"Errore, non è possibile recuperare le recensioni!"];
+
+            return[reviewList];
+
+        } else {
+            const reviewList = await Database.review.findAll({
+                where:{
+                    review_reply: {[Op.not]: ''},
+                }
+              
+            });
+
+            if(!reviewList) return[500,"Errore, non è possibile recuperare le recensioni!"];
+
+            return[reviewList];
+        }
+        
+    }
+
+    async reviewUserInfo(reqData){
+
+        const reviewInfo = await Database.review.findOne({
+            attributes:['id', 'review_date', 'review_reply', 'review_text', 'stars'],
+            where: {
+                id: reqData.body.id,
+            }
+        })
+
+        return[reviewInfo];
+    }
+
+    async reviewAdminInfo(reqData){
+
+        const reviewInfo = await Database.review.findOne({
+            attributes:['id', 'review_date', 'review_reply', 'review_text', 'stars'],
+            where: {
+                id: reqData.body.id,
+            }
+        })
+
+        return[reviewInfo];
+    }
+
+    async editReviewUser(reqData){
+
+        const reviewModified = await Database.review.update(
+            {
+                review_text: reqData.body.reviewText,
+                stars: reqData.body.reviewStars,
+            },
+            {
+                where: {
+                    id: reqData.body.id
+                },
+            }
+            
+        );
+
+        if(!reviewModified[0]) return[500, "Impossibile modificare la recensione!"];
+
+        return[200, "Recensione modificata correttamente!"];
+    }
+
+    async editReply(reqData){
+
+        const reviewModified = await Database.review.update(
+            {
+                review_reply: reqData.body.replyText,
+            },
+            {
+                where: {
+                    id: reqData.body.id
+                },
+            }
+            
+        );
+
+        if(!reviewModified[0]) return[500, "Impossibile modificare la risposta!"];
+
+        return[200, "Risposta modificata correttamente!"];
+    }
+
+    async newReply(reqData){
+        
+        const newReply = await Database.review.update(
+            {
+                review_reply: reqData.body.replyText
+            },
+            {
+                where: {
+                    id: reqData.body.id,
+                }
+            }
+        )
+
+        if(!newReply[0]) return[500, "Impossibile inserire la risposta!"];
+
+        return[200, "La risposta è stata inserita correttamente!"];
     }
 
 }
