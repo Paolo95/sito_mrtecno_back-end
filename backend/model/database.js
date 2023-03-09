@@ -337,10 +337,12 @@ const Review = Singleton.createSingleton.getInstance().define('review', {
     review_text: {
         type: Sequelize.STRING(2000),
         allowNull: false,
+        defaultValue: '',
     },
     review_reply: {
         type: Sequelize.STRING(2000),
         allowNull: true,
+        defaultValue: '',
     },
     stars: {
         type: Sequelize.INTEGER,
