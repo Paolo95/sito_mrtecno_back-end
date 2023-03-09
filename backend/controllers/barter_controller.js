@@ -15,10 +15,7 @@ class Barter_controller{
     constructor(){};
 
     async createBarter(bodyFE){
-
-        if (!bodyFE.body.telephone === undefined || !bodyFE.body.barterItem === undefined)
-            return [500, "Errore, la richiesta non è stata formulata correttamente!"];
-     
+   
         const userCode = await Database.user.findOne({
             attributes: ['id'], 
             where: { 
@@ -53,8 +50,6 @@ class Barter_controller{
 
     async barterStatus(bodyFE){
 
-        if(!bodyFE.body.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
-
         const barterStatus = await Database.barter.findOne({
             attributes: ['status'],
             where: { id: bodyFE.body.id}});
@@ -66,8 +61,6 @@ class Barter_controller{
 
     async barterTotal(bodyFE){
 
-        if(!bodyFE.body.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
-
         const barterTotal = await Database.barter.findOne({
             attributes: ['total'],
             where: { id: bodyFE.body.id}});
@@ -78,8 +71,6 @@ class Barter_controller{
     }
 
     async barterInfo(bodyFE){
-
-        if(!bodyFE.id) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
 
         const productId = await Database.barter.findOne({
             attributes: ['productId'],
@@ -112,8 +103,6 @@ class Barter_controller{
     }
 
     async barterAccepted(reqData){
-
-        if(!reqData.body.barterCode) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
         
         const barterUpdated = await Database.barter.update(
             {
@@ -250,8 +239,6 @@ class Barter_controller{
 
     async barterList(bodyFE){
 
-        if(!bodyFE.status) return [500, "Errore, la richiesta non è stata formulata correttamente!"]
-
         const barter = await Database.barter.findAll({
             raw: true,
             attributes: ['id', 'status', 'total', 'barter_date', 'barter_items'],
@@ -331,10 +318,6 @@ class Barter_controller{
     }
 
     async editBarter(bodyFE){
-
-        if ( !bodyFE.id || !bodyFE.editedShippingCode === undefined || !bodyFE.editedDate ||
-                !bodyFE.editedShippingCarrier === undefined || !bodyFE.editedStatus ||
-                    !bodyFE.editedTotal) return [500, 'Errore, la richiesta non è formulata correttamente!']
 
         const barter = await Database.barter.findOne({
             where: {

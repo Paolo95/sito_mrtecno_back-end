@@ -19,8 +19,6 @@ class Faq_controller{
 
     async newFaq(bodyFE){
 
-        if (!bodyFE.newQuestion || !bodyFE.newAnswer) return [500, "Errore, richiesta non formulata correttamente!"];
-
         const newFaq = await Database.faq.create({
             
             question: bodyFE.newQuestion,
@@ -33,8 +31,6 @@ class Faq_controller{
     }
     
     async updateFaq(bodyFE){
-
-        if (!bodyFE.question || !bodyFE.answer) return [500, "Errore, richiesta non formulata correttamente!"];
 
         const editedFaq = await Database.faq.update(
             { 
@@ -54,8 +50,6 @@ class Faq_controller{
     }
     
     async deleteFaq(bodyFE){
-
-        if (!bodyFE.id) return [500, "Errore, richiesta non formulata correttamente!"];
 
         const deletedFaq = await Database.faq.destroy({
             where: {
