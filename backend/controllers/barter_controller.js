@@ -4,6 +4,9 @@ const MailGenerator = require('../utils/mailGenerator');
 const mailGenerator = new MailGenerator();
 const nodemailer = require("nodemailer");
 const path = require('path');
+const moment = require('moment');
+const { Op } = require('sequelize');
+moment().format();
 
 dotenv.config();
 
@@ -344,6 +347,33 @@ class Barter_controller{
 
         return[200,"Permuta modificata con successo!"];
 
+    }
+
+    async getRecentBarters(){
+        
+        const barterList = await Database.barter.findAll({
+            raw: true,
+            limit: 20,
+            attributes: ['barter_date', 'id'],
+            include:
+                { 
+                    model: Database.user,
+                    required: true,
+                    attributes:['username']
+                },
+            where:
+                {
+                    barter_date: {
+                        [Op.gte]: moment().subtract(7, 'days').toDate()
+                    },
+                    status: 'In lavorazione',
+                }
+            
+        });
+
+        if (!barterList) return [500, "Errore, impossibile recuperare le permute!"];
+
+        return[barterList];
     }
 
 

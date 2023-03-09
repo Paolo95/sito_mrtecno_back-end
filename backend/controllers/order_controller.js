@@ -427,14 +427,14 @@ class Order_controller{
                             [Op.gte]: moment().subtract(7, 'days').toDate()
                         },
                         order_status: {
-                            [Op.notLike]: '%Ordine concluso',  
+                            [Op.notLike]: '%Concluso',  
                         }
                     },
                     include: [
                         { 
                             model: Database.user,
                             required: true,
-                            attributes:['email']
+                            attributes:['username']
                         }
                     ]
                 },
