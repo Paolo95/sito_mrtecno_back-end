@@ -57,7 +57,7 @@ router.post('/orderDetails/:orderId', tokenVerify, async (req, res) => {
     
 });
 
-router.post('/orderList', tokenVerify, async(req, res) => {
+router.post('/orderList', tokenVerify, isAdmin, async(req, res) => {
 
     const result = await order_controller.getOrderList(req.body);
 

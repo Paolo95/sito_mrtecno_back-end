@@ -239,30 +239,64 @@ class Barter_controller{
 
     async barterList(bodyFE){
 
-        const barter = await Database.barter.findAll({
-            raw: true,
-            attributes: ['id', 'status', 'total', 'barter_date', 'barter_items', 'barter_telephone'],
-            include: [
-                { 
-                    attributes:['email'],
-                    model: Database.user,
-                    required: true,                            
-                }
-            ],
-            where: [
-                {
-                    status: bodyFE.status,
-                }
-            ],
-            order: [
-                ['barter_date', 'DESC']
-            ]
-            
-        });
+        if(bodyFE.numberSearched !== ''){
 
-        if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
+            const barter = await Database.barter.findAll({
+                raw: true,
+                attributes: ['id', 'status', 'total', 'barter_date', 'barter_items', 'barter_telephone'],
+                include: [
+                    { 
+                        attributes:['email'],
+                        model: Database.user,
+                        required: true,                            
+                    }
+                ],
+                where: [
+                    {
+                        status: bodyFE.status,
+                        barter_telephone: {
+                            [Op.like]: bodyFE.numberSearched + '%',
+                        },
+                    }
+                ],
+                order: [
+                    ['barter_date', 'DESC']
+                ]
+                
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
+            
+            return[barter];
+
+        }else{
+            const barter = await Database.barter.findAll({
+                raw: true,
+                attributes: ['id', 'status', 'total', 'barter_date', 'barter_items', 'barter_telephone'],
+                include: [
+                    { 
+                        attributes:['email'],
+                        model: Database.user,
+                        required: true,                            
+                    }
+                ],
+                where: [
+                    {
+                        status: bodyFE.status,
+                    }
+                ],
+                order: [
+                    ['barter_date', 'DESC']
+                ]
+                
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"];
+            
+            return[barter];
+        }
+
         
-        return[barter];
     }
 
     async userBarterList(bodyFE){
