@@ -241,7 +241,7 @@ class Barter_controller{
 
         const barter = await Database.barter.findAll({
             raw: true,
-            attributes: ['id', 'status', 'total', 'barter_date', 'barter_items'],
+            attributes: ['id', 'status', 'total', 'barter_date', 'barter_items', 'barter_telephone'],
             include: [
                 { 
                     attributes:['email'],
