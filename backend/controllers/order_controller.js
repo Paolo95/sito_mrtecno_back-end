@@ -444,7 +444,7 @@ class Order_controller{
                     attributes: [],
                 },
             ],
-            group: ['order.id', 'product.id', 'qty', 'priceEach'],
+            group: ['order.id', 'order->user.id', 'product.id', 'qty', 'priceEach'],
             
             
         });
