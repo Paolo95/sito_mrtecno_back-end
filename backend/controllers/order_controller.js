@@ -6,6 +6,7 @@ const mailGenerator = new MailGenerator();
 const nodemailer = require("nodemailer");
 const groupBy = require('group-by-with-sum');
 const moment = require('moment');
+const path = require('path');
 moment().format();
 
 dotenv.config();
@@ -221,16 +222,11 @@ class Order_controller{
             attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
             include: [
                 {
-                    attributes: ['id', 'order_date', 'order_status', 'shipping_cost'],
+                    attributes: ['id', 'order_date', 'order_status', 'shipping_cost', 'paypal_fee'],
                     model: Database.order,
                     where: {
                         userId: userCode.id
                     },
-                    required: true,
-                },
-                {
-                    attributes: [],
-                    model: Database.product,
                     required: true,
                 },
             ],
@@ -239,16 +235,11 @@ class Order_controller{
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"]; 
 
-        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
-
-        order_total_groupby.forEach((item_gb) => {
-            order.forEach((item_o) => {
-                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
-            })
+        order.forEach((item) => {
+            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
         })
-
-        return[order.filter((v,i,a)=>a.findIndex(v2=>(v2['order.id']===v['order.id']))===i)
-                    .sort((a, b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
+        
+        return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
 
     }
 
@@ -287,11 +278,15 @@ class Order_controller{
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
 
         const order_total_groupby = groupBy(order, 'order.id', 'order_total');
-
+        
         order_total_groupby.forEach((item_gb) => {
             order.forEach((item_o) => {
                 if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
             })
+        })
+
+        order.forEach((item) => {
+            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
         })
 
         return[order];
@@ -310,7 +305,7 @@ class Order_controller{
                         order_status: filters.status,
                     },
                     required: true,
-                    attributes: ['id','order_status', 'order_date'],
+                    attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
                     order: [['order.order_date', 'DESC']],
                     include: [
                         { 
@@ -326,22 +321,18 @@ class Order_controller{
                     attributes: [],
                 },
             ],
-            group: ['order->user.id', 'order.id', 'product.id', 'qty', 'priceEach'],
+            group: ['order.id'],
             
             
         });
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
 
-        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
-
-        order_total_groupby.forEach((item_gb) => {
-            order.forEach((item_o) => {
-                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
-            })
+        order.forEach((item) => {
+            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
         })
-
-        return[order.sort((a, b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
+        
+        return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
     }
 
     async getOrderAdminDetails(orderID){
@@ -373,6 +364,10 @@ class Order_controller{
             order.forEach((item_o) => {
                 if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
             })
+        })
+
+        order.forEach((item) => {
+            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
         })
 
         return[order];
@@ -420,7 +415,7 @@ class Order_controller{
                 {
                     model: Database.order,
                     required: true,
-                    attributes: ['order_status', 'order_date', 'id'],
+                    attributes: ['order_status', 'order_date', 'id', 'shipping_cost', 'paypal_fee'],
                     order: [['order.order_date', 'DESC']],
                     where: {
                         order_date: {
@@ -438,25 +433,16 @@ class Order_controller{
                         }
                     ]
                 },
-                {
-                    model: Database.product,
-                    required: true,
-                    attributes: [],
-                },
             ],
-            group: ['order.id', 'order->user.id', 'product.id', 'qty', 'priceEach'],
+            group: ['order.id'],
             
             
         });
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
 
-        const order_total_groupby = groupBy(order, 'order.id', 'order_total');
-
-        order_total_groupby.forEach((item_gb) => {
-            order.forEach((item_o) => {
-                if(item_o['order.id'] === item_gb['order.id']) item_o['order_total'] = item_gb['order_total']
-            })
+        order.forEach((item) => {
+            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
         })
 
         return[order];

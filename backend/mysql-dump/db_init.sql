@@ -24,6 +24,18 @@ VALUES
         (NULL, 1, 850.99 , 1, 1),
         (NULL, 2, 450.00 , 2, 2);
 
+INSERT INTO `barter` (`id`, `barter_date`, `barter_telephone`, `barter_items`, `status`, `paypal_fee`, `payment_method`, `shipping_type`, `shipping_code`, `shipping_address`, `shipping_carrier`, `shipping_cost`, `barter_evaluation`, `notes`, `userId`)
+VALUES
+        (NULL, "2023-02-01", "3383232123", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "PayPal", "Corriere", "", "", "GLS",  9.99, 60.00, "", 1),
+        (NULL, "2023-01-21", "3383535353", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Valutazione effettuata", 0, "PayPal", "Corriere", "", "", "GLS", 9.99, 200.00, "", 2),
+        (NULL, "2023-02-12", "3397373712", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "PayPal", "Corriere", "", "", "GLS", 19.99, 40.00, "", 1),
+        (NULL, "2023-01-12", "3391212311", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Oggetti ricevuti", 0, "Bonifico", "Corriere", "", "", "GLS", 9.99, 300.00, "", 2);
+
+INSERT INTO `barter_product` (`id`, `qty`, `priceEach`, `productId`, `barterId`)
+VALUES
+        (NULL, 1, 850.99 , 1, 1),
+        (NULL, 2, 450.00 , 2, 2);        
+
 INSERT INTO `review` (`id`, `review_date`, `review_text`, `review_reply`, `stars`, `userId`, `productId`)
 VALUES
         (NULL, "2023-01-16", "Testo recensione", "Testo risposta", 4, 2, 4),
@@ -34,9 +46,3 @@ VALUES
         (NULL, "Come funziona la permuta?", "La permuta è molto semplice..."),
         (NULL, "Posso pagare con PayPal?", "Certo, accettiamo pagamenti con PayPal");
 
-INSERT INTO `barter` (`id`, `barter_date`, `barter_telephone`, `barter_items`, `status`, `paypal_fee`, `shipping_type`, `shipping_code`, `shipping_address`, `shipping_carrier`, `shipping_cost`, `total`, `notes`, `userId`, `productId`)
-VALUES
-        (NULL, "2023-02-01", "3383232123", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "Corriere", "", "", "GLS",  9.99, 60.00, "", 1, 2),
-        (NULL, "2023-01-21", "3383535353", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Valutazione effettuata", 0, "Corriere", "", "", "GLS", 9.99, 200.00, "", 2, 3),
-        (NULL, "2023-02-12", "3397373712", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "In lavorazione", 0, "Corriere", "", "", "GLS", 19.99, 40.00, "", 1, 1),
-        (NULL, "2023-01-12", "3391212311", "{""0"":{""name"":""zf"",""description"":""dzfv""}}", "Oggetti ricevuti", 0, "Corriere", "", "", "GLS", 9.99, 300.00, "", 2, 4);

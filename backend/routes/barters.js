@@ -43,7 +43,7 @@ router.post('/barterTotal', tokenVerify, async (req, res) => {
 
 router.post('/barterInfo', tokenVerify, async (req, res) => {
 
-    const result = await barter_controller.barterInfo(req.body);
+    const result = await barter_controller.barterInfo(req);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);
@@ -79,7 +79,7 @@ router.post('/barterAcceptedBT', tokenVerify, async (req, res) => {
 
 router.post('/barterList', tokenVerify, isAdmin, async (req, res) => {
     
-    const result = await barter_controller.barterList(req.body);
+    const result = await barter_controller.barterList(req);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);
@@ -102,18 +102,6 @@ router.post('/userBarterList', tokenVerify, async (req, res) => {
 })
 
 router.post('/barterDetails/:barterID', tokenVerify, async (req, res) => {
-    
-    const result = await barter_controller.barterDetailsWithProdInfo(req.params.barterID);
-
-    if(typeof(result[0]) === 'number'){
-        res.status(result[0]).send(result[1]);
-    }else{
-
-        res.json(result[0]);
-    }
-})
-
-router.post('/barterDetailsWithProduct/:barterID', tokenVerify, async (req, res) => {
     
     const result = await barter_controller.barterDetailsWithProdInfo(req.params.barterID);
 

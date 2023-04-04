@@ -110,11 +110,11 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: false,
     },
     barter_items: {
-        type: Sequelize.STRING(2500),
+        type: Sequelize.STRING(4000),
         allowNull: false
     },
     status: {
-        type: Sequelize.STRING(400),
+        type: Sequelize.STRING(40),
         allowNull: false,
         defaultValue: 'In lavorazione'
     },
@@ -122,6 +122,11 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         type: Sequelize.FLOAT(7,2),
         allowNull: true,
         defaultValue: 0,
+    },
+    payment_method: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: "",
     },
     shipping_type: {
         type: Sequelize.STRING,
@@ -148,7 +153,7 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: false,
         defaultValue: 0,
     },
-    total: {
+    barter_evaluation: {
         type: Sequelize.FLOAT(7,2),
         allowNull: true,
         defaultValue: 0,
@@ -267,6 +272,26 @@ const Order_Product = Singleton.createSingleton.getInstance().define('order_prod
     freezeTableName: true
 });
 
+const Barter_Product = Singleton.createSingleton.getInstance().define('barter_product', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    qty: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    priceEach: {
+        type: Sequelize.FLOAT(7,2),
+        allowNull: false,
+    },
+    }, { 
+    timestamps: false,
+    freezeTableName: true
+});
+
 const Order = Singleton.createSingleton.getInstance().define('order', {
     id: {
         type: Sequelize.INTEGER,
@@ -335,12 +360,12 @@ const Review = Singleton.createSingleton.getInstance().define('review', {
         allowNull: false,
     },
     review_text: {
-        type: Sequelize.STRING(2000),
+        type: Sequelize.STRING(200),
         allowNull: false,
         defaultValue: '',
     },
     review_reply: {
-        type: Sequelize.STRING(2000),
+        type: Sequelize.STRING(200),
         allowNull: true,
         defaultValue: '',
     },
@@ -355,6 +380,14 @@ const Review = Singleton.createSingleton.getInstance().define('review', {
 
 Product.hasMany(Order_Product, {
     foreignKey: 'productId'
+});
+
+Product.hasMany(Barter_Product, {
+    foreignKey: 'productId'
+});
+
+Barter.hasMany(Barter_Product, {
+    foreignKey: 'barterId'
 });
 
 Order.hasMany(Order_Product, {
@@ -377,16 +410,13 @@ User.hasMany(Barter, {
     foreignKey: 'userId'
 });
 
-Product.hasMany(Barter, {
-    foreignKey: 'productId'
-});
-
+Barter_Product.belongsTo(Product);
+Barter_Product.belongsTo(Barter);
 Order_Product.belongsTo(Product);
 Order_Product.belongsTo(Order);
 Order.belongsTo(User);
 Review.belongsTo(User);
 Review.belongsTo(Product);
-Barter.belongsTo(Product)
 Barter.belongsTo(User);
 
   module.exports = {
@@ -394,6 +424,7 @@ Barter.belongsTo(User);
     user: User,
     product: Product,
     order_product: Order_Product,
+    barter_product: Barter_Product,
     order: Order,
     review: Review,
     faq: Faq,
