@@ -375,7 +375,7 @@ class Barter_controller{
                     required: true,
                 },
             ],
-            group: ['barter.id'],
+            group: ['barter->id'],
         });
 
         if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
