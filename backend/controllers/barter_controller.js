@@ -271,28 +271,34 @@ class Barter_controller{
     }
 
     async barterList(reqData){
-
-        if(reqData.body.numberSearched !== ''){
-
-            const userCode = await Database.user.findOne({
-                where: {
-                    username: reqData.user.UserInfo.username
-                }
-            })
-    
-            if(!userCode) return [404, "Utente non trovato!"];
+        
+        if(reqData.body.numberSearched !== '' && reqData.body.emailSearched !== '' && reqData.body.idSearched !== ''){
 
             const barter = await Database.barter_product.findAll({
                 raw: true,
                 attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
                 include: [
                     {
-                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee'],
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
                         model: Database.barter,
                         where: {
-                            userId: userCode.id
+                            status: reqData.body.statusSelected,
+                            barter_telephone: reqData.body.numberSearched,
+                            id: reqData.body.idSearched,
                         },
                         required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email'],
+                                where: {
+                                    email: {
+                                        [Op.like]: reqData.body.emailSearched + '%',
+                                    }
+                                }
+                            }
+                        ],
                     },
                 ],
                 group: ['barter.id'],
@@ -306,15 +312,7 @@ class Barter_controller{
             
             return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
 
-        }else{
-
-            const userCode = await Database.user.findOne({
-                where: {
-                    username: reqData.user.UserInfo.username
-                }
-            })
-    
-            if(!userCode) return [404, "Utente non trovato!"];
+        }else if (reqData.body.numberSearched !== '' && reqData.body.emailSearched === '' && reqData.body.idSearched !== ''){
 
             const barter = await Database.barter_product.findAll({
                 raw: true,
@@ -324,7 +322,9 @@ class Barter_controller{
                         attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
                         model: Database.barter,
                         where: {
-                            userId: userCode.id
+                            status: reqData.body.statusSelected,
+                            id: reqData.body.idSearched,
+                            barter_telephone: reqData.body.numberSearched,
                         },
                         required: true,
                         include: [
@@ -347,8 +347,230 @@ class Barter_controller{
             })
             
             return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
-        }
 
+        }else if (reqData.body.numberSearched !== '' && reqData.body.emailSearched === '' && reqData.body.idSearched === ''){
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                            barter_telephone: reqData.body.numberSearched,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email']
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+            
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+        
+        }else if (reqData.body.numberSearched === '' && reqData.body.emailSearched !== '' && reqData.body.idSearched !== ''){
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                            id: reqData.body.idSearched,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email'],
+                                where: {
+                                    email: {
+                                        [Op.like]: reqData.body.emailSearched + '%',
+                                    }
+                                }
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+            
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+        
+        }else if (reqData.body.numberSearched === '' && reqData.body.emailSearched !== '' && reqData.body.idSearched === ''){
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email'],
+                                where: {
+                                    email: {
+                                        [Op.like]: reqData.body.emailSearched + '%',
+                                    }
+                                }
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+            
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+        
+        }else if (reqData.body.numberSearched !== '' && reqData.body.emailSearched !== '' && reqData.body.idSearched === ''){
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                            barter_telephone: reqData.body.numberSearched,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email'],
+                                where: {
+                                    email: {
+                                        [Op.like]: reqData.body.emailSearched + '%',
+                                    }
+                                }
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+            
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+        
+        }else if (reqData.body.numberSearched === '' && reqData.body.emailSearched === '' && reqData.body.idSearched !== ''){
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                            id: reqData.body.idSearched,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email']
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+            
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+
+        }else{
+
+            const barter = await Database.barter_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total']],
+                include: [
+                    {
+                        attributes: ['id', 'barter_date', 'status', 'shipping_cost', 'paypal_fee', 'barter_telephone'],
+                        model: Database.barter,
+                        where: {
+                            status: reqData.body.statusSelected,
+                        },
+                        required: true,
+                        include: [
+                            { 
+                                model: Database.user,
+                                required: true,
+                                attributes:['email']
+                            }
+                        ],
+                    },
+                   
+                ],
+                group: ['barter.id'],
+            });
+    
+            if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
+    
+            barter.forEach((item) => {
+                item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
+            })
+
+            return[barter.sort((a,b) => a['barter.barter_date'] < b['barter.barter_date'] ? 1 : -1)];
+        }
         
     }
 

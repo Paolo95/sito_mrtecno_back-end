@@ -295,44 +295,184 @@ class Order_controller{
 
     async getOrderList(filters){
 
-        const order = await Database.order_product.findAll({
-            raw: true,
-            attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
-            include: [
-                {
-                    model: Database.order,
-                    where: {
-                        order_status: filters.status,
+        if(filters.idSearched !== '' && filters.emailSearched !== ''){
+
+            const order = await Database.order_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
+                include: [
+                    {
+                        model: Database.order,
+                        where: {
+                            order_status: filters.status,
+                            id: filters.idSearched,
+                        },
+                        required: true,
+                        attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
+                        order: [['order.order_date', 'DESC']],
+                        include: [
+                            { 
+                                attributes:['email'],
+                                model: Database.user,
+                                required: true,
+                                where: {
+                                    email: {
+                                        [Op.like]: filters.emailSearched + '%',
+                                    }
+                                }                           
+                            }
+                        ]
                     },
-                    required: true,
-                    attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
-                    order: [['order.order_date', 'DESC']],
-                    include: [
-                        { 
-                            attributes:['email'],
-                            model: Database.user,
-                            required: true,                            
-                        }
-                    ]
-                },
-                {
-                    model: Database.product,
-                    required: true,
-                    attributes: [],
-                },
-            ],
-            group: ['order.id'],
+                    {
+                        model: Database.product,
+                        required: true,
+                        attributes: [],
+                    },
+                ],
+                group: ['order.id'],
+                
+                
+            });
+    
+            if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+    
+            order.forEach((item) => {
+                item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
+            })
             
+            return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
+
+        }else if (filters.idSearched !== '' && filters.emailSearched === ''){
+
+            const order = await Database.order_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
+                include: [
+                    {
+                        model: Database.order,
+                        where: {
+                            order_status: filters.status,
+                            id: filters.idSearched,
+                        },
+                        required: true,
+                        attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
+                        order: [['order.order_date', 'DESC']],
+                        include: [
+                            { 
+                                attributes:['email'],
+                                model: Database.user,
+                                required: true,                         
+                            }
+                        ]
+                    },
+                    {
+                        model: Database.product,
+                        required: true,
+                        attributes: [],
+                    },
+                ],
+                group: ['order.id'],
+                
+                
+            });
+    
+            if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+    
+            order.forEach((item) => {
+                item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
+            })
             
-        });
+            return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
 
-        if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+        }else if (filters.idSearched === '' && filters.emailSearched !== ''){
 
-        order.forEach((item) => {
-            item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
-        })
+            const order = await Database.order_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
+                include: [
+                    {
+                        model: Database.order,
+                        where: {
+                            order_status: filters.status,
+                        },
+                        required: true,
+                        attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
+                        order: [['order.order_date', 'DESC']],
+                        include: [
+                            { 
+                                attributes:['email'],
+                                model: Database.user,
+                                required: true, 
+                                where: {
+                                    email: {
+                                        [Op.like]: filters.emailSearched + '%',
+                                    }
+                                }                          
+                            }
+                        ]
+                    },
+                    {
+                        model: Database.product,
+                        required: true,
+                        attributes: [],
+                    },
+                ],
+                group: ['order.id'],
+                
+                
+            });
+    
+            if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+    
+            order.forEach((item) => {
+                item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
+            })
+            
+            return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
+
+        }else{
+
+            const order = await Database.order_product.findAll({
+                raw: true,
+                attributes: [[Database.sequelize.literal(process.env.ORDER_GROUP_BY_QUERY), 'order_total']],
+                include: [
+                    {
+                        model: Database.order,
+                        where: {
+                            order_status: filters.status,
+                        },
+                        required: true,
+                        attributes: ['id','order_status', 'order_date', 'shipping_cost', 'paypal_fee'],
+                        order: [['order.order_date', 'DESC']],
+                        include: [
+                            { 
+                                attributes:['email'],
+                                model: Database.user,
+                                required: true,                            
+                            }
+                        ]
+                    },
+                    {
+                        model: Database.product,
+                        required: true,
+                        attributes: [],
+                    },
+                ],
+                group: ['order.id'],
+                
+                
+            });
+    
+            if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
+    
+            order.forEach((item) => {
+                item['order_total'] = item['order_total'] + item['order.shipping_cost'] + item['order.paypal_fee']
+            })
+            
+            return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
+        }
+
         
-        return[order.sort((a,b) => a['order.order_date'] < b['order.order_date'] ? 1 : -1)];
     }
 
     async getOrderAdminDetails(orderID){
