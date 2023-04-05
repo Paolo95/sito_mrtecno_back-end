@@ -414,7 +414,7 @@ class Barter_controller{
                     required: true,
                 },
             ],
-            group: ['barter.id', 'product.id', 'qty', 'priceEach'],
+            group: ['barter.id', 'product.id', 'qty', 'priceEach', 'barter->user.id'],
             
         });
 
@@ -432,7 +432,6 @@ class Barter_controller{
             item['barter_total'] = item['barter_total'] + item['barter.shipping_cost'] + item['barter.paypal_fee']
         })
 
-        console.log(barter)
         return[barter];
 
     }
