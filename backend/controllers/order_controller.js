@@ -272,7 +272,7 @@ class Order_controller{
                     required: true,
                 },
             ],
-            group: ['order.id', 'product.id', 'qty', 'priceEach', 'order->user.id'],
+            group: ['order.id', 'product.id', 'qty', 'priceEach'],
         });
 
         if (!order) return [500, "Errore, impossibile recuperare gli ordini!"];
