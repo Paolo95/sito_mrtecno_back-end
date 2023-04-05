@@ -27,9 +27,7 @@ VALUES
 INSERT INTO "barter" ("id", "barter_date", "barter_telephone", "barter_items", "status", "paypal_fee", "payment_method", "shipping_type", "shipping_code", "shipping_address", "shipping_carrier", "shipping_cost", "barter_evaluation", "notes", "userId")
 VALUES
         (default, '2023-02-01', '3383232123', '{"0":{"name":"zf","description":"dzfv"}}', 'In lavorazione', 0, 'PayPal', 'Corriere', '', '', 'GLS',  9.99, 60.00, '', 1),
-        (default, '2023-01-21', '3383535353', '{"0":{"name":"zf","description":"dzfv"}}', 'Valutazione effettuata', 0, 'PayPal', 'Corriere', '', '', 'GLS', 9.99, 200.00, '', 2),
-        (default, '2023-02-12', '3397373712', '{"0":{"name":"zf","description":"dzfv"}}', 'In lavorazione', 0, 'PayPal', 'Corriere', '', '', 'GLS', 19.99, 40.00, '', 1),
-        (default, '2023-01-12', '3391212311', '{"0":{"name":"zf","description":"dzfv"}}', 'Oggetti ricevuti', 0, 'Bonifico', 'Corriere', '', '', 'GLS', 9.99, 300.00, '', 2);
+        (default, '2023-01-21', '3383535353', '{"0":{"name":"zf","description":"dzfv"}}', 'Valutazione effettuata', 0, 'PayPal', 'Corriere', '', '', 'GLS', 9.99, 200.00, '', 2);
 
 INSERT INTO "barter_product" ("id", "qty", "priceEach", "productId", "barterId")
 VALUES
