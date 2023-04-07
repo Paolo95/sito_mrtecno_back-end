@@ -517,10 +517,20 @@ class Order_controller{
     async editOrder(orderFE){
 
         const order = await Database.order.findOne({
+            raw: true,
+            attributes: ['id'],
             where: {
                 id: orderFE.id,
             },
-        })
+            include: [
+                {
+                    attributes: ['email'],
+                    model: Database.user,
+                    required: true,
+                },
+            ],
+        }
+        );
         
         if( !order ) return[404, "Ordine non trovato!"];
 
@@ -541,7 +551,57 @@ class Order_controller{
 
         if (!editedOrder[0]) return[500, "Errore, ordine non modificato!"];
 
-        return[200,"Ordine modificato con successo!"];
+        const updOrder = await this.getOrderAdminDetails(order.id);
+
+        console.log(updOrder);
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+        
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: order['user.email'],
+            subject: 'MrTecno - Aggiornamento ordine n. ' + order.id,
+            html: (updOrder[0][0]['order.payment_method'] === 'PayPal' && updOrder[0][0]['order.shipping_type'] === 'Corriere') 
+                    ? mailGenerator.orderPayPalUpdate(updOrder) :
+                        (updOrder[0][0]['order.payment_method'] === 'PayPal' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede') 
+                        ? mailGenerator.orderNoShippingPayPalUpdate(updOrder) :
+                            (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Corriere') 
+                            ? mailGenerator.orderBTUpdate(updOrder) :
+                                (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede')
+                                ? mailGenerator.orderNoShippingBTUpdate(updOrder) : null ,
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, "Ordine modificato con successo!"];
+        }
 
     }
 
