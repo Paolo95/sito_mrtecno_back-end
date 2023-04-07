@@ -15,7 +15,7 @@ class Review_controller{
             
             const review = await Database.review.findAll({
                 raw: true,
-                attributes: ['id', 'review_date', 'review_text', 'review_reply' ,'stars', 'user.username'],
+                attributes: ['id', 'review_date', 'review_text', 'review_reply' ,'stars', 'user.username', 'productId'],
                 include: [
                     {
                         attributes: ['username'],
