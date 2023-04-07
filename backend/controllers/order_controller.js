@@ -553,8 +553,6 @@ class Order_controller{
 
         const updOrder = await this.getOrderAdminDetails(order.id);
 
-        console.log(updOrder);
-
         let transporter = nodemailer.createTransport({
             service: process.env.EMAIL_SERVICE,
             host: process.env.EMAIL_HOST,
