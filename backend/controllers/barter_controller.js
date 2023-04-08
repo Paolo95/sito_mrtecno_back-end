@@ -807,6 +807,45 @@ class Barter_controller{
         return[barterList];
     }
 
+    async barterRefused(reqData){
+
+        const username = reqData.user.UserInfo.username;
+
+        const userCode = await Database.user.findOne({
+            attributes: ['id'],
+            where: { username: username 
+            }
+        });
+
+        if ( !userCode ) return [404, "Utente non trovato!"] 
+
+        const barter = await Database.barter.findOne({
+            raw: true,
+            attributes: ['id'],
+            where: {
+                id: reqData.body.barterId,
+                userId: userCode.id,
+            },
+        });
+        
+        if ( !barter ) return[403, "La permuta non è associata al tuo account!"];
+
+        const editedBarter = await Database.barter.update(
+            { 
+                status: 'Rifiutata',
+            },
+            {
+                where: {
+                    id: barter.id
+                }
+            }         
+        )
+
+        if (!editedBarter[0]) return[500, "Errore, permuta non modificata!"];
+
+        return[200,'Permuta rifiutata!'];
+    }
+
 
 }
 
