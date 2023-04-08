@@ -17,23 +17,21 @@ class Barter_controller{
 
     async createBarter(reqData){
    
-        const userCode = await Database.user.findOne({
-            attributes: ['id'], 
+        const userInfo = await Database.user.findOne({
+            attributes: ['id', 'email'], 
             where: { 
                     username: reqData.user.UserInfo.username
                 }
             });
         
-        if (!userCode) return [404, "Utente non trovato"];
-
-        console.log(reqData.body)
+        if (!userInfo) return [404, "Utente non trovato"];
 
         const newBarter = await Database.barter.create({
             barter_date: new Date().toISOString().slice(0, 10),
             barter_telephone: reqData.body.telephone,
             barter_items: reqData.body.barterItem,
             status: 'In lavorazione',
-            userId: userCode.id,
+            userId: userInfo.id,
         });
         
         reqData.body.cartItem.map(async item => {
@@ -53,7 +51,47 @@ class Barter_controller{
             })
         });   
 
-       return[newBarter];
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Proposta di permuta in valutazione',
+            html: mailGenerator.newBarter(reqData.body.barterItem),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return[newBarter];
+        }
+
     }  
 
     async barterStatus(reqData){
@@ -621,7 +659,6 @@ class Barter_controller{
                     where: {
                         id: barterID,
                     },
-                    attributes: ['id','status', 'barter_date', 'barter_items', 'barter_evaluation', 'paypal_fee', 'shipping_cost', 'shipping_carrier', 'shipping_address', 'barter_telephone','notes'],
                     order: [['barter.barter_date', 'DESC']],
                     include: [
                         { 
@@ -661,10 +698,19 @@ class Barter_controller{
     async editBarter(bodyFE){
 
         const barter = await Database.barter.findOne({
+            raw: true,
+            attributes: ['id'],
+            include: [
+                { 
+                    attributes:['email'],
+                    model: Database.user,
+                    required: true,                            
+                },
+            ],
             where: {
                 id: bodyFE.id,
             },
-        })
+        });
         
         if( !barter ) return[404, "Permuta non trovata!"];
 
@@ -674,6 +720,7 @@ class Barter_controller{
                 barter_date: bodyFE.editedDate,
                 shipping_carrier: bodyFE.editedShippingCarrier,
                 status: bodyFE.editedStatus,
+                barter_evaluation: bodyFE.editedEvaluation,
                 notes: bodyFE.editedNotes,
             },
             {
@@ -685,7 +732,51 @@ class Barter_controller{
 
         if (!editedBarter[0]) return[500, "Errore, permuta non modificata!"];
 
-        return[200,"Permuta modificata con successo!"];
+        const barterUpd = await this.barterDetailsWithProdInfo(barter.id);
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: barter['user.email'],
+            subject: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? 'MrTecno - Permuta n. ' + barter.id + ' valutata!' :
+                        'MrTecno - Aggiornamento permuta n. ' + barter.id ,
+            html: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? mailGenerator.barterValued(barterUpd) :
+                    barterUpd[0][0]['barter.payment_method'] === 'PayPal' ? mailGenerator.barterPayPalUpdate(barterUpd) :
+                        barterUpd[0][0]['barter.payment_method'] === 'Bonifico' ? mailGenerator.barterBTUpdate(barterUpd):
+                            null,
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+            }]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return[200,"Permuta modificata con successo!"];
+        }        
 
     }
 
