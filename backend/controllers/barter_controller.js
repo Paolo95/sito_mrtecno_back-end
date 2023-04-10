@@ -339,7 +339,7 @@ class Barter_controller{
                         ],
                     },
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -375,7 +375,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -410,7 +410,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -450,7 +450,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -489,7 +489,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -529,7 +529,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -564,7 +564,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
@@ -598,7 +598,7 @@ class Barter_controller{
                     },
                    
                 ],
-                group: ['barter.id'],
+                group: ['barter.id', 'barter.user.id'],
             });
     
             if (!barter) return [500, "Errore, impossibile recuperare le permute!"]; 
