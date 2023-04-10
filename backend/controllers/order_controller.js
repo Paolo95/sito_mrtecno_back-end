@@ -458,7 +458,7 @@ class Order_controller{
                         attributes: [],
                     },
                 ],
-                group: ['order.id'],
+                group: ['order.id', 'order.user.id'],
                 
                 
             });
