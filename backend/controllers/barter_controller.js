@@ -651,7 +651,7 @@ class Barter_controller{
 
         const barter = await Database.barter_product.findAll({
             raw: true,
-            attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total'], 'qty'],
+            attributes: [[Database.sequelize.literal(process.env.BARTER_GROUP_BY_QUERY), 'barter_total'], 'qty', 'priceEach'],
             include: [
                 {
                     model: Database.barter,
