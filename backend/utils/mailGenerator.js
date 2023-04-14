@@ -1325,7 +1325,7 @@ class MailGenerator{
                                     <tr>
                                         <td class="pad">
                                             <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; text-align: center;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                <p style="margin: 0; text-align: center;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -2666,7 +2666,7 @@ class MailGenerator{
                                     <tr>
                                         <td class="pad">
                                             <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; text-align: center;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                <p style="margin: 0; text-align: center;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -4005,7 +4005,7 @@ class MailGenerator{
                                     <tr>
                                         <td class="pad">
                                             <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; text-align: center;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                <p style="margin: 0; text-align: center;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -5342,7 +5342,7 @@ class MailGenerator{
                                     <tr>
                                         <td class="pad">
                                             <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; text-align: center;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                <p style="margin: 0; text-align: center;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -7494,7 +7494,7 @@ class MailGenerator{
                                                 <tr>
                                                     <td class="pad">
                                                         <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:16.8px;">
-                                                            <p style="margin: 0;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                            <p style="margin: 0;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -9188,7 +9188,7 @@ class MailGenerator{
                                                 <tr>
                                                     <td class="pad">
                                                         <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:16.8px;">
-                                                            <p style="margin: 0;">${parseFloat(item['product.price']).toFixed(2)} €</p>
+                                                            <p style="margin: 0;">${parseFloat(item['priceEach']).toFixed(2)} €</p>
                                                         </div>
                                                     </td>
                                                 </tr>
