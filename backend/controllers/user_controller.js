@@ -120,6 +120,8 @@ class User_controller{
         
         if (foundUser === null) return [401, 'Username e/o password errati o utente non attivato!'];
 
+        if (foundUser.role === 'unsubscribed') return [403,'Utente non autorizzato!'];
+
         const match = await bcrypt.compare(userFE.password, foundUser.password);
         
         if (match){
@@ -386,7 +388,7 @@ class User_controller{
         let orderPending = false;
 
         orderFiltered.forEach((item) => {
-            if (item['order.order_status'] === 'Ordine in lavorazione' || item['order.order_status'] === 'Ordine in spedizione'){
+            if (item['order.order_status'] === 'In lavorazione' || item['order.order_status'] === 'In spedizione'){
                 orderPending = true;
             }
         })
@@ -400,15 +402,29 @@ class User_controller{
                     { status: 'In lavorazione',},
                     { status: 'Valutazione effettuata',},
                     { status: 'Pagamento effettuato',},
-                    { status: 'Oggetti ricevuti',},
                     { status: 'Prodotto spedito',},
+                    { status: 'Permuta ricevuta',},
+                    
+                    
                 ]
             }
         }); 
 
         if (barterPending > 0) return [403, "Impossibile eliminare l'account se hai una permuta non conclusa!"]
         
-        const deleteUser = await Database.user.destroy({ where: { id: user.id } });
+        const deleteUser = await Database.user.update(
+            {  
+                lastname: 'Utente disiscritto',
+                name: 'Utente disiscritto',
+                email: 'Utente disiscritto',
+                username: 'Utente disiscritto',
+                password: 'Utente disiscritto',
+                role: 'unsubscribed',
+                refresh_token: '',
+            },
+            {
+                where: { id: user.id } 
+            });
 
         if (deleteUser === undefined) return [500, "Errore nel server!"]
 
