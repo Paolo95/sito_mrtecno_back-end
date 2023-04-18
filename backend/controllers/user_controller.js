@@ -417,7 +417,7 @@ class User_controller{
                 lastname: 'Utente disiscritto',
                 name: 'Utente disiscritto',
                 email: 'Utente disiscritto',
-                username: 'Utente disiscritto',
+                username: 'Utente',
                 password: 'Utente disiscritto',
                 role: 'unsubscribed',
                 refresh_token: '',
