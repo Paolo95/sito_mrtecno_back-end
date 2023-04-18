@@ -426,7 +426,7 @@ class User_controller{
                 where: { id: user.id } 
             });
 
-        if (deleteUser === undefined) return [500, "Errore nel server!"]
+        if (!deleteUser[0]) return [500, "Errore nel server!"]
 
         return [200,"Account eliminato con successo!"]
     }
