@@ -558,8 +558,8 @@ class MailGenerator{
     </html>`;
     }
 
-    orderPayPal(data){
-
+    orderPayPal(data, id){
+        
         const productItems = data.items.map((item) => {
             return(
                 `
@@ -777,6 +777,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Stiamo elaborando l'ordine il prima possibile</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -1299,7 +1308,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderPayPalUpdate(data){
+    orderPayPalUpdate(data, id){
 
         const productItems = data[0].map((item) => {
             return(
@@ -1518,6 +1527,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Di seguito trovi tutti i dettagli aggiornati</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -2040,7 +2058,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderNoShippingPayPal(data){
+    orderNoShippingPayPal(data, id){
 
         const productItems = data.items.map((item) => {
             return(
@@ -2259,6 +2277,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Stiamo elaborando l'ordine il prima possibile</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -2640,7 +2667,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderNoShippingPayPalUpdate(data){
+    orderNoShippingPayPalUpdate(data, id){
 
         const productItems = data[0].map((item) => {
             return(
@@ -2859,6 +2886,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Di seguito trovi tutti i dettagli aggiornati</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -3240,7 +3276,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderBT(data){
+    orderBT(data, id){
 
         const productItems = data.cartItem.map((item) => {
             return(
@@ -3459,6 +3495,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Stiamo elaborando l'ordine il prima possibile</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -3979,7 +4024,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderBTUpdate(data){
+    orderBTUpdate(data, id){
 
         const productItems = data[0].map((item) => {
             return(
@@ -4198,6 +4243,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Di seguito trovi tutti i dettagli aggiornati</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -4718,7 +4772,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderNoShippingBT(data){
+    orderNoShippingBT(data, id){
 
         const productItems = data.cartItem.map((item, index) => {
             return(
@@ -4937,6 +4991,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Stiamo elaborando l'ordine il prima possibile</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -5316,7 +5379,7 @@ class MailGenerator{
         </html>`;
     }
 
-    orderNoShippingBTUpdate(data){
+    orderNoShippingBTUpdate(data, id){
 
         const productItems = data[0].map((item, index) => {
             return(
@@ -5535,6 +5598,15 @@ class MailGenerator{
                                                                             <div class style="font-size: 12px; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #71777D; line-height: 1.2;">
                                                                                 <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">Di seguito trovi tutti i dettagli aggiornati</p>
                                                                             </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice ordine: ${id}</p>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -5914,7 +5986,7 @@ class MailGenerator{
         </html>`;
     }
 
-    newBarter(data){
+    newBarter(data, id){
 
         const productItems = Object.values(JSON.parse(data)).map((item, index) => {
             return (
@@ -6120,6 +6192,15 @@ class MailGenerator{
                                                                     </td>
                                                                 </tr>
                                                             </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice permuta: ${id}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -6236,7 +6317,7 @@ class MailGenerator{
         </html>`;
     }
 
-    barterValued(data){
+    barterValued(data, id){
 
         const productItems = Object.values(JSON.parse(data[0][0]['barter.barter_items'])).map((item, index) => {
             
@@ -6462,6 +6543,15 @@ class MailGenerator{
                                                                     </td>
                                                                 </tr>
                                                             </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice permuta: ${id}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -6646,7 +6736,7 @@ class MailGenerator{
 
     }
 
-    barterPayPal(data){
+    barterPayPal(data, id){
    
         const productItems = Object.values(data.body.paypalDetails.purchase_units[0].items).map((item, index) => {
             return(
@@ -6922,7 +7012,16 @@ class MailGenerator{
                                                                             <td class="pad">
                                                                                 <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
                                                                                     <p style="margin: 0; margin-bottom: 16px;"><strong>Attenzione:</strong></p>
-                                                                                    <p style="margin: 0;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annulata</strong>.</p>
+                                                                                    <p style="margin: 0;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annullata</strong>.</p>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                        <tr>
+                                                                            <td class="pad">
+                                                                                <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                                    <p style="margin: 0;">Codice permuta: ${id}</p>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -7465,7 +7564,7 @@ class MailGenerator{
                 </html>`;
     }
 
-    barterPayPalUpdate(data){
+    barterPayPalUpdate(data, id){
    
         const productItems = Object.values(data[0]).map((item, index) => {
             return(
@@ -7741,7 +7840,16 @@ class MailGenerator{
                                                                             <td class="pad">
                                                                                 <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
                                                                                     <p style="margin: 0; margin-bottom: 16px;"><strong>Attenzione:</strong></p>
-                                                                                    <p style="margin: 0;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annulata</strong>.</p>
+                                                                                    <p style="margin: 0;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annullata</strong>.</p>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                        <tr>
+                                                                            <td class="pad">
+                                                                                <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                                    <p style="margin: 0;">Codice permuta: ${id}</p>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -8322,7 +8430,7 @@ class MailGenerator{
                 </html>`;
     }
 
-    barterBT(data){
+    barterBT(data, id){
 
         const productItems = Object.values(data.body.barterInfo).map((item, index) => {
             return(
@@ -8589,6 +8697,15 @@ class MailGenerator{
                                                                     </td>
                                                                 </tr>
                                                             </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice permuta: ${id}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -8610,7 +8727,7 @@ class MailGenerator{
                                                                     <td class="pad">
                                                                         <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
                                                                             <p style="margin: 0; margin-bottom: 16px;"><strong>Attenzione:</strong></p>
-                                                                            <p style="margin: 0; margin-bottom: 16px;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annulata</strong>.</p>
+                                                                            <p style="margin: 0; margin-bottom: 16px;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annullata</strong>.</p>
                                                                             <p style="margin: 0;">&nbsp;</p>
                                                                         </div>
                                                                     </td>
@@ -9159,7 +9276,7 @@ class MailGenerator{
         </html>`;
     }
 
-    barterBTUpdate(data){
+    barterBTUpdate(data, id){
 
         const productItems = Object.values(data[0]).map((item, index) => {
             return(
@@ -9426,6 +9543,15 @@ class MailGenerator{
                                                                     </td>
                                                                 </tr>
                                                             </table>
+                                                            <table class="paragraph_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                                <tr>
+                                                                    <td class="pad">
+                                                                        <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                                                            <p style="margin: 0;">Codice permuta: ${id}</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -9447,7 +9573,7 @@ class MailGenerator{
                                                                     <td class="pad">
                                                                         <div style="color:#101112;direction:ltr;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
                                                                             <p style="margin: 0; margin-bottom: 16px;"><strong>Attenzione:</strong></p>
-                                                                            <p style="margin: 0; margin-bottom: 16px;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annulata</strong>.</p>
+                                                                            <p style="margin: 0; margin-bottom: 16px;"><strong>si ricorda di consegnare al corriere i prodotti da permutare.</strong><br>Il rimborso della permuta verrà effettuato <strong>entro 24 ore</strong> dal ricevimento e visione dei prodotti permutati.<br>Verrà accreditato l'importo sullo stesso conto della transazione.<br>Nel caso non conformi alle specifiche inoltrate, i prodotti verranno restituiti tramite corriere e <strong>la permuta verrà annullata</strong>.</p>
                                                                             <p style="margin: 0;">&nbsp;</p>
                                                                         </div>
                                                                     </td>

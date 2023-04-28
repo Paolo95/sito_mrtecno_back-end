@@ -85,9 +85,9 @@ class Order_controller{
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to: userInfo.email,
-            subject: 'MrTecno - Riepilogo ordine',
-            html: reqData.body.pickup ? mailGenerator.orderNoShippingPayPal(reqData.body.paypalDetails.purchase_units[0]) 
-                                      : mailGenerator.orderPayPal(reqData.body.paypalDetails.purchase_units[0]),
+            subject: 'MrTecno - Riepilogo ordine n. ' + newOrder.id,
+            html: reqData.body.pickup ? mailGenerator.orderNoShippingPayPal(reqData.body.paypalDetails.purchase_units[0], newOrder.id) 
+                                      : mailGenerator.orderPayPal(reqData.body.paypalDetails.purchase_units[0], newOrder.id),
             attachments: [{
             filename: 'mrtecnoLogo.jpeg',
             path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -177,8 +177,8 @@ class Order_controller{
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Riepilogo ordine',
-            html: reqData.body.pickup ? mailGenerator.orderNoShippingBT(reqData.body) 
-                                      : mailGenerator.orderBT(reqData.body),
+            html: reqData.body.pickup ? mailGenerator.orderNoShippingBT(reqData.body, newOrder.id) 
+                                      : mailGenerator.orderBT(reqData.body, newOrder.id),
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -570,13 +570,13 @@ class Order_controller{
             to: order['user.email'],
             subject: 'MrTecno - Aggiornamento ordine n. ' + order.id,
             html: (updOrder[0][0]['order.payment_method'] === 'PayPal' && updOrder[0][0]['order.shipping_type'] === 'Corriere') 
-                    ? mailGenerator.orderPayPalUpdate(updOrder) :
+                    ? mailGenerator.orderPayPalUpdate(updOrder, order.id) :
                         (updOrder[0][0]['order.payment_method'] === 'PayPal' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede') 
-                        ? mailGenerator.orderNoShippingPayPalUpdate(updOrder) :
+                        ? mailGenerator.orderNoShippingPayPalUpdate(updOrder, order.id) :
                             (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Corriere') 
-                            ? mailGenerator.orderBTUpdate(updOrder) :
+                            ? mailGenerator.orderBTUpdate(updOrder, order.id) :
                                 (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede')
-                                ? mailGenerator.orderNoShippingBTUpdate(updOrder) : null ,
+                                ? mailGenerator.orderNoShippingBTUpdate(updOrder, order.id) : null ,
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',

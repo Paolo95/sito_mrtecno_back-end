@@ -67,7 +67,7 @@ class Barter_controller{
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Proposta di permuta in valutazione',
-            html: mailGenerator.newBarter(reqData.body.barterItem),
+            html: mailGenerator.newBarter(reqData.body.barterItem, newBarter.id),
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -211,7 +211,7 @@ class Barter_controller{
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Riepilogo permuta',
-            html: mailGenerator.barterPayPal(reqData),
+            html: mailGenerator.barterPayPal(reqData, reqData.body.barterCode),
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -282,7 +282,7 @@ class Barter_controller{
             from: process.env.USER_EMAIL,
             to: userInfo.email,
             subject: 'MrTecno - Riepilogo permuta',
-            html: mailGenerator.barterBT(reqData),
+            html: mailGenerator.barterBT(reqData, reqData.body.barterCode),
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -751,9 +751,9 @@ class Barter_controller{
             to: barter['user.email'],
             subject: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? 'MrTecno - Permuta n. ' + barter.id + ' valutata!' :
                         'MrTecno - Aggiornamento permuta n. ' + barter.id ,
-            html: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? mailGenerator.barterValued(barterUpd) :
-                    barterUpd[0][0]['barter.payment_method'] === 'PayPal' ? mailGenerator.barterPayPalUpdate(barterUpd) :
-                        barterUpd[0][0]['barter.payment_method'] === 'Bonifico' ? mailGenerator.barterBTUpdate(barterUpd):
+            html: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? mailGenerator.barterValued(barterUpd, barter.id) :
+                    barterUpd[0][0]['barter.payment_method'] === 'PayPal' ? mailGenerator.barterPayPalUpdate(barterUpd, barter.id) :
+                        barterUpd[0][0]['barter.payment_method'] === 'Bonifico' ? mailGenerator.barterBTUpdate(barterUpd, barter.id):
                             null,
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
