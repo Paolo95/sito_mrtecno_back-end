@@ -110,7 +110,7 @@ const Barter = Singleton.createSingleton.getInstance().define('barter', {
         allowNull: false,
     },
     barter_items: {
-        type: Sequelize.STRING(4000),
+        type: Sequelize.STRING(5500),
         allowNull: false
     },
     status: {
