@@ -212,7 +212,7 @@ class User_controller{
 
         const cookies = cookiesFE;
 
-        if (!cookies?.jwt) return rreturn [204, 'Nessun refresh token trovato!'];
+        if (!cookies?.jwt) return [204, 'Nessun refresh token trovato!'];
         const refreshToken = cookies.jwt;
 
         const foundUser = await Database.user.findOne({ where: {refresh_token: refreshToken} });
