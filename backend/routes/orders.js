@@ -31,6 +31,19 @@ router.post('/newOrderBT', tokenVerify, async (req, res) => {
     
 });
 
+router.post('/newOrderStripe', tokenVerify, async (req, res) => {
+
+    const result = await order_controller.createOrderStripe(req);
+
+    if(typeof(result[0]) === 'number'){
+        res.status(result[0]).send(result[1]);
+    }else{
+
+        res.json(result[0]);
+    }
+    
+});
+
 router.post('/userOrders', tokenVerify, async (req, res) => {
 
     const result = await order_controller.getUserOrders(req);

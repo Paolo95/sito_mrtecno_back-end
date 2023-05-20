@@ -5,9 +5,9 @@ const MailGenerator = require('../utils/mailGenerator');
 const mailGenerator = new MailGenerator();
 const nodemailer = require("nodemailer");
 const groupBy = require('group-by-with-sum');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const path = require('path');
-moment().format();
+moment().tz("Europe/Rome").format();
 
 dotenv.config();
 
@@ -179,6 +179,96 @@ class Order_controller{
             subject: 'MrTecno - Riepilogo ordine',
             html: reqData.body.pickup ? mailGenerator.orderNoShippingBT(reqData.body, newOrder.id) 
                                       : mailGenerator.orderBT(reqData.body, newOrder.id),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, "Ordine salvato correttamente!"];
+        }
+        
+    }
+
+    async createOrderStripe(reqData){
+
+        const userInfo = await Database.user.findOne({
+            attributes: ['id', 'email'],
+            where: { username: reqData.user.UserInfo.username 
+            }
+        });
+
+        if ( !userInfo ) return [404, "Utente non trovato!"];
+
+        const order_address = reqData.body.shipping_address + ' ' + reqData.body.hnumber + ' ' + 
+                                    reqData.body.cap + ' ' + reqData.body.city + ' ' + reqData.body.province;
+
+        const order_date = moment.tz(moment(), 'Europe/Rome').format('YYYY-MM-DD');
+
+        const newOrder = await Database.order.create({
+            order_date: order_date,
+            order_status: "In lavorazione",
+            shipping_address: order_address,
+            shipping_cost: reqData.body.shipping_cost,
+            payment_method: 'Carta di credito',
+            paypal_fee: reqData.body.payment_fee,
+            shipping_code: "",
+            shipping_type: reqData.body.pickup ? 'Ritiro in sede' : 'Corriere',
+            notes: "",
+            userId: userInfo.id,
+        });
+        
+        reqData.body.cartItem.map(async item => {
+
+            const newOrderProduct = await Database.order_product.create({
+                qty: item.qty,
+                priceEach: item.price,
+                productId: item.id,
+                orderId: newOrder.id,
+            });
+
+            await Database.product.decrement('qtyInStock', { 
+                by: newOrderProduct.qty,
+                where: {
+                    id: item.id                    
+                }
+            })
+        });   
+
+                
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo ordine',
+            html: reqData.body.pickup ? mailGenerator.orderNoShippingStripe(reqData.body, newOrder.id) 
+                                      : mailGenerator.orderStripe(reqData.body, newOrder.id),
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
@@ -576,7 +666,11 @@ class Order_controller{
                             (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Corriere') 
                             ? mailGenerator.orderBTUpdate(updOrder, order.id) :
                                 (updOrder[0][0]['order.payment_method'] === 'Bonifico' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede')
-                                ? mailGenerator.orderNoShippingBTUpdate(updOrder, order.id) : null ,
+                                ? mailGenerator.orderNoShippingBTUpdate(updOrder, order.id) : 
+                                    (updOrder[0][0]['order.payment_method'] === 'Carta di credito' && updOrder[0][0]['order.shipping_type'] === 'Corriere')
+                                        ? mailGenerator.orderStripeUpdate(updOrder, order.id) : 
+                                            (updOrder[0][0]['order.payment_method'] === 'Carta di credito' && updOrder[0][0]['order.shipping_type'] === 'Ritiro in sede')
+                                                ? mailGenerator.orderNoShippingStripeUpdate(updOrder, order.id) : null ,
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',

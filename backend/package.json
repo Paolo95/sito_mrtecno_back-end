@@ -20,12 +20,13 @@
     "express-fileupload": "^1.4.0",
     "group-by-with-sum": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.26.0"
+    "sequelize": "^6.26.0",
+    "stripe": "^12.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
