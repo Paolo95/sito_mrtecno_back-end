@@ -17,7 +17,7 @@ router.post('/config', tokenVerify, async(req, res) => {
 
 router.post('/createPaymentIntent', tokenVerify, async(req, res) => {
 
-    const result = await stripe_controller.getPaymentIntent(req.body);
+    const result = await stripe_controller.getPaymentIntent(req);
 
     if(typeof(result[0]) === 'number'){
         res.status(result[0]).send(result[1]);

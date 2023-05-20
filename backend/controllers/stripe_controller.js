@@ -16,12 +16,13 @@ class Stripe_controller{
         return[{ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY }];
     }
 
-    async getPaymentIntent(reqBody){
+    async getPaymentIntent(reqData){
 
         const paymentIntent = await stripe.paymentIntents.create({
             currency: "eur",
-            amount: Math.round(reqBody.total * 100),
+            amount: Math.round(reqData.body.total * 100),
             payment_method_types: ['card'],
+            description: 'Ordine utente: ' + reqData.user.UserInfo.username,
         });
 
         if (!paymentIntent) return[400, "Impossibile recuperare il paymentIntent!"];
