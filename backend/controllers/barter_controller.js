@@ -5,9 +5,9 @@ const mailGenerator = new MailGenerator();
 const nodemailer = require("nodemailer");
 const path = require('path');
 const groupBy = require('group-by-with-sum');
-const moment = require('moment');
 const { Op } = require('sequelize');
-moment().format();
+const moment = require('moment-timezone');
+moment().tz("Europe/Rome").format();
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ class Barter_controller{
         if (!userInfo) return [404, "Utente non trovato"];
 
         const newBarter = await Database.barter.create({
-            barter_date: new Date().toISOString().slice(0, 10),
+            barter_date: moment.tz(moment(), 'Europe/Rome').format('YYYY-MM-DD'),
             barter_telephone: reqData.body.telephone,
             barter_items: reqData.body.barterItem,
             status: 'In lavorazione',
@@ -235,6 +235,83 @@ class Barter_controller{
         }else{
             return [barterUpdated];
         }
+
+    }
+
+    async barterAcceptedStripe(reqData){
+
+        const shipping_address = reqData.body.address + " " +
+            reqData.body.hnumber + " - " +
+                reqData.body.cap + " " + reqData.body.city;
+        
+        const barterUpdated = await Database.barter.update(
+            {
+              status: "Pagamento effettuato",
+              payment_method: "Carta di credito",
+              shipping_type: "Corriere",
+              shipping_address: shipping_address,
+              shipping_carrier: "GLS",
+              shipping_cost: reqData.body.shipping_cost,
+              paypal_fee: reqData.body.payment_fee,
+            },
+            {
+              where: { 
+                id: reqData.body.barterCode,
+            },
+            }
+          );
+
+        if (!barterUpdated) return [500, "Errore nel server!"];
+
+        const userInfo = await Database.user.findOne({
+            attributes: ['email'],
+            where: { username: reqData.user.UserInfo.username 
+            }
+        });
+
+        if ( !userInfo ) return [404, "Utente non trovato!"];
+
+        let transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            secure: false,
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            },
+        });
+
+        const basePath = path.join(__dirname, '../');
+
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: userInfo.email,
+            subject: 'MrTecno - Riepilogo permuta',
+            html: mailGenerator.barterStripe(reqData, reqData.body.barterCode),
+            attachments: [{
+                filename: 'mrtecnoLogo.jpeg',
+                path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
+                cid: 'mrtecnoLogo'
+                },
+            ]
+        };
+
+        let errorPresent = false;
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                errorPresent = true;
+            } else {
+                errorPresent = false;
+            }
+        });
+        
+        if(errorPresent){
+            return [500, 'Errore nel server!'];
+        }else{
+            return [200, "Permuta registrata correttamente!"];
+        }      
+    
 
     }
 
@@ -753,8 +830,9 @@ class Barter_controller{
                         'MrTecno - Aggiornamento permuta n. ' + barter.id ,
             html: barterUpd[0][0]['barter.status'] === 'Valutazione effettuata' ? mailGenerator.barterValued(barterUpd, barter.id) :
                     barterUpd[0][0]['barter.payment_method'] === 'PayPal' ? mailGenerator.barterPayPalUpdate(barterUpd, barter.id) :
-                        barterUpd[0][0]['barter.payment_method'] === 'Bonifico' ? mailGenerator.barterBTUpdate(barterUpd, barter.id):
-                            null,
+                        barterUpd[0][0]['barter.payment_method'] === 'Bonifico' ? mailGenerator.barterBTUpdate(barterUpd, barter.id) :
+                            barterUpd[0][0]['barter.payment_method'] === 'Carta di credito' ? mailGenerator.barterStripeUpdate(barterUpd, barter.id) :
+                                null,
             attachments: [{
                 filename: 'mrtecnoLogo.jpeg',
                 path: basePath + '/utils/emailImages/mrtecnoLogo.jpeg',
